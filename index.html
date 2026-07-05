@@ -88,7 +88,7 @@
     
     <div class="input-group">
         <label for="reference">Enter Bible Reference:</label>
-        <input type="text" id="reference" placeholder="e.g., 2 Kings 3:4 or John 3:16">
+        <input type="text" id="reference" placeholder="e.g., 2 Kgs 3:4, 1 Cor 13, Rev 21:1">
     </div>
     
     <div class="button-zone">
@@ -100,11 +100,83 @@
     </div>
     
     <p class="note">
-        Type your reference first, then click any button to open that specific commentary in a new window/tab. 
+        Accepts any standard or abbreviated Old and New Testament format (e.g., <i>1 Cor, Matt, SOS, 2 Kgs, Php, Rev</i>).
     </p>
 </div>
 
 <script>
+const bookMap = {
+    // === OLD TESTAMENT ===
+    "genesis": "genesis", "gen": "genesis", "ge": "genesis", "gn": "genesis",
+    "exodus": "exodus", "ex": "exodus", "exod": "exodus", "exo": "exodus",
+    "leviticus": "leviticus", "lev": "leviticus", "le": "leviticus", "lv": "leviticus",
+    "numbers": "numbers", "num": "numbers", "nu": "numbers", "nm": "numbers", "nb": "numbers",
+    "deuteronomy": "deuteronomy", "deut": "deuteronomy", "de": "deuteronomy", "dt": "deuteronomy",
+    "joshua": "joshua", "josh": "joshua", "jos": "joshua", "jsh": "joshua",
+    "judges": "judges", "judg": "judges", "jdg": "judges", "jg": "judges", "jdgs": "judges",
+    "ruth": "ruth", "rth": "ruth", "ru": "ruth",
+    "1 samuel": "1_samuel", "1 sam": "1_samuel", "1 sm": "1_samuel", "1 sa": "1_samuel", "1 s": "1_samuel", "i sam": "1_samuel", "i sa": "1_samuel", "1samuel": "1_samuel", "1sam": "1_samuel", "1sa": "1_samuel", "1s": "1_samuel", "1st samuel": "1_samuel", "1st sam": "1_samuel", "first samuel": "1_samuel", "first sam": "1_samuel",
+    "2 samuel": "2_samuel", "2 sam": "2_samuel", "2 sm": "2_samuel", "2 sa": "2_samuel", "2 s": "2_samuel", "ii sam": "2_samuel", "ii sa": "2_samuel", "2samuel": "2_samuel", "2sam": "2_samuel", "2sa": "2_samuel", "2s": "2_samuel", "2nd samuel": "2_samuel", "2nd sam": "2_samuel", "second samuel": "2_samuel", "second sam": "2_samuel",
+    "1 kings": "1_kings", "1 kgs": "1_kings", "1 ki": "1_kings", "1kgs": "1_kings", "1kin": "1_kings", "1ki": "1_kings", "1k": "1_kings", "i kgs": "1_kings", "i ki": "1_kings", "1st kings": "1_kings", "1st kgs": "1_kings", "first kings": "1_kings", "first kgs": "1_kings",
+    "2 kings": "2_kings", "2 kgs": "2_kings", "2 ki": "2_kings", "2kgs": "2_kings", "2kin": "2_kings", "2ki": "2_kings", "2k": "2_kings", "ii kgs": "2_kings", "ii ki": "2_kings", "2nd kings": "2_kings", "2nd kgs": "2_kings", "second kings": "2_kings", "second kgs": "2_kings",
+    "1 chronicles": "1_chronicles", "1 chron": "1_chronicles", "1 chr": "1_chronicles", "1 ch": "1_chronicles", "1chronicles": "1_chronicles", "1chron": "1_chronicles", "1chr": "1_chronicles", "1ch": "1_chronicles", "i chronicles": "1_chronicles", "i chron": "1_chronicles", "i chr": "1_chronicles", "i ch": "1_chronicles", "1st chronicles": "1_chronicles", "1st chron": "1_chronicles", "first chronicles": "1_chronicles", "first chron": "1_chronicles",
+    "2 chronicles": "2_chronicles", "2 chron": "2_chronicles", "2 chr": "2_chronicles", "2 ch": "2_chronicles", "2chronicles": "2_chronicles", "2chron": "2_chronicles", "2chr": "2_chronicles", "2ch": "2_chronicles", "ii chronicles": "2_chronicles", "ii chron": "2_chronicles", "ii chr": "2_chronicles", "ii ch": "2_chronicles", "2nd chronicles": "2_chronicles", "2nd chron": "2_chronicles", "second chronicles": "2_chronicles", "second chron": "2_chronicles",
+    "ezra": "ezra", "ezr": "ezra", "ez": "ezra",
+    "nehemiah": "nehemiah", "neh": "nehemiah", "ne": "nehemiah",
+    "esther": "esther", "est": "esther", "esth": "esther", "es": "esther",
+    "job": "job", "jb": "job",
+    "psalms": "psalms", "ps": "psalms", "psallm": "psalms", "psalm": "psalms", "pslm": "psalms", "psa": "psalms", "psm": "psalms", "pss": "psalms",
+    "proverbs": "proverbs", "prov": "proverbs", "pro": "proverbs", "prv": "proverbs", "pr": "proverbs",
+    "ecclesiastes": "ecclesiastes", "eccles": "ecclesiastes", "eccle": "ecclesiastes", "ecc": "ecclesiastes", "ec": "ecclesiastes", "qoh": "ecclesiastes",
+    "song of solomon": "song_of_solomon", "song": "song_of_solomon", "song of songs": "song_of_solomon", "sos": "song_of_solomon", "so": "song_of_solomon", "canticle of canticles": "song_of_solomon", "canticles": "song_of_solomon", "cant": "song_of_solomon",
+    "isaiah": "isaiah", "isa": "isaiah", "is": "isaiah",
+    "jeremiah": "jeremiah", "jer": "jeremiah", "je": "jeremiah", "jr": "jeremiah",
+    "lamentations": "lamentations", "lam": "lamentations", "la": "lamentations",
+    "ezekiel": "ezekiel", "ezek": "ezekiel", "eze": "ezekiel", "ezk": "ezekiel",
+    "daniel": "daniel", "dan": "daniel", "da": "daniel", "dn": "daniel",
+    "hosea": "hosea", "hos": "hosea", "ho": "hosea",
+    "joel": "joel", "jl": "joel",
+    "amos": "amos", "am": "amos",
+    "obadiah": "obadiah", "obad": "obadiah", "ob": "obadiah",
+    "jonah": "jonah", "jnh": "jonah", "jon": "jonah",
+    "micah": "micah", "mic": "micah", "mc": "micah",
+    "nahum": "nahum", "nah": "nahum", "na": "nahum",
+    "habakkuk": "habakkuk", "hab": "habakkuk", "hb": "habakkuk",
+    "zephaniah": "zephaniah", "zeph": "zephaniah", "zep": "zephaniah", "zp": "zephaniah",
+    "haggai": "haggai", "hag": "haggai", "hg": "haggai",
+    "zechariah": "zechariah", "zech": "zechariah", "zec": "zechariah", "zc": "zechariah",
+    "malachi": "malachi", "mal": "malachi", "ml": "malachi",
+
+    // === NEW TESTAMENT ===
+    "matthew": "matthew", "matt": "matthew", "mt": "matthew",
+    "mark": "mark", "mrk": "mark", "mar": "mark", "mk": "mark", "mr": "mark",
+    "luke": "luke", "luk": "luke", "lk": "luke",
+    "john": "john", "joh": "john", "jhn": "john", "jn": "john",
+    "acts": "acts", "act": "acts", "ac": "acts",
+    "romans": "romans", "rom": "romans", "ro": "romans", "rm": "romans",
+    "1 corinthians": "1_corinthians", "1 cor": "1_corinthians", "1 co": "1_corinthians", "i cor": "1_corinthians", "i co": "1_corinthians", "1cor": "1_corinthians", "1co": "1_corinthians", "i corinthians": "1_corinthians", "1corinthians": "1_corinthians", "1st corinthians": "1_corinthians", "first corinthians": "1_corinthians",
+    "2 corinthians": "2_corinthians", "2 cor": "2_corinthians", "2 co": "2_corinthians", "ii cor": "2_corinthians", "ii co": "2_corinthians", "2cor": "2_corinthians", "2co": "2_corinthians", "ii corinthians": "2_corinthians", "2corinthians": "2_corinthians", "2nd corinthians": "2_corinthians", "second corinthians": "2_corinthians",
+    "galatians": "galatians", "gal": "galatians", "ga": "galatians",
+    "ephesians": "ephesians", "eph": "ephesians", "ephes": "ephesians",
+    "philippians": "philippians", "phil": "philippians", "php": "philippians", "pp": "philippians",
+    "colossians": "colossians", "col": "colossians", "co": "colossians",
+    "1 thessalonians": "1_thessalonians", "1 thess": "1_thessalonians", "1 thes": "1_thessalonians", "1 th": "1_thessalonians", "i thessalonians": "1_thessalonians", "i thess": "1_thessalonians", "i thes": "1_thessalonians", "i th": "1_thessalonians", "1thessalonians": "1_thessalonians", "1thess": "1_thessalonians", "1thes": "1_thessalonians", "1th": "1_thessalonians", "1st thessalonians": "1_thessalonians", "1st thess": "1_thessalonians", "first thessalonians": "1_thessalonians", "first thess": "1_thessalonians",
+    "2 thessalonians": "2_thessalonians", "2 thess": "2_thessalonians", "2 thes": "2_thessalonians", "2 th": "2_thessalonians", "ii thessalonians": "2_thessalonians", "ii thess": "2_thessalonians", "ii thes": "2_thessalonians", "ii th": "2_thessalonians", "2thessalonians": "2_thessalonians", "2thess": "2_thessalonians", "2thes": "2_thessalonians", "2th": "2_thessalonians", "2nd thessalonians": "2_thessalonians", "2nd thess": "2_thessalonians", "second thessalonians": "2_thessalonians", "second thess": "2_thessalonians",
+    "1 timothy": "1_timothy", "1 tim": "1_timothy", "1 ti": "1_timothy", "i timothy": "1_timothy", "i tim": "1_timothy", "i ti": "1_timothy", "1timothy": "1_timothy", "1tim": "1_timothy", "1ti": "1_timothy", "1st timothy": "1_timothy", "1st tim": "1_timothy", "first timothy": "1_timothy", "first tim": "1_timothy",
+    "2 timothy": "2_timothy", "2 tim": "2_timothy", "2 ti": "2_timothy", "ii timothy": "2_timothy", "ii tim": "2_timothy", "ii ti": "2_timothy", "2timothy": "2_timothy", "2tim": "2_timothy", "2ti": "2_timothy", "2nd timothy": "2_timothy", "2nd tim": "2_timothy", "second timothy": "2_timothy", "second tim": "2_timothy",
+    "titus": "titus", "tit": "titus", "ti": "titus",
+    "philemon": "philemon", "philem": "philemon", "phm": "philemon", "pm": "philemon",
+    "hebrews": "hebrews", "heb": "hebrews",
+    "james": "james", "jas": "james", "jm": "james",
+    "1 peter": "1_peter", "1 pet": "1_peter", "1 pe": "1_peter", "1 pt": "1_peter", "1 p": "1_peter", "i pet": "1_peter", "i pt": "1_peter", "i pe": "1_peter", "1peter": "1_peter", "1pet": "1_peter", "1pe": "1_peter", "1pt": "1_peter", "1p": "1_peter", "i peter": "1_peter", "1st peter": "1_peter", "first peter": "1_peter",
+    "2 peter": "2_peter", "2 pet": "2_peter", "2 pe": "2_peter", "2 pt": "2_peter", "2 p": "2_peter", "ii peter": "2_peter", "ii pet": "2_peter", "ii pt": "2_peter", "ii pe": "2_peter", "2peter": "2_peter", "2pet": "2_peter", "2pe": "2_peter", "2pt": "2_peter", "2p": "2_peter", "2nd peter": "2_peter", "second peter": "2_peter",
+    "1 john": "1_john", "1 jhn": "1_john", "1 jn": "1_john", "1 j": "1_john", "1john": "1_john", "1jhn": "1_john", "1joh": "1_john", "1jn": "1_john", "1jo": "1_john", "1j": "1_john", "i john": "1_john", "i jhn": "1_john", "i joh": "1_john", "i jn": "1_john", "i jo": "1_john", "1st john": "1_john", "first john": "1_john",
+    "2 john": "2_john", "2 jhn": "2_john", "2 jn": "2_john", "2 j": "2_john", "2john": "2_john", "2jhn": "2_john", "2joh": "2_john", "2jn": "2_john", "2jo": "2_john", "2j": "2_john", "ii john": "2_john", "ii jhn": "2_john", "ii joh": "2_john", "ii jn": "2_john", "ii jo": "2_john", "2nd john": "2_john", "second john": "2_john",
+    "3 john": "3_john", "3 jhn": "3_john", "3 jn": "3_john", "3 j": "3_john", "3john": "3_john", "3jhn": "3_john", "3joh": "3_john", "3jn": "3_john", "3jo": "3_john", "3j": "3_john", "iii john": "3_john", "iii jhn": "3_john", "iii joh": "3_john", "iii jn": "3_john", "iii jo": "3_john", "3rd john": "3_john", "third john": "3_john",
+    "jude": "jude", "jud": "jude", "jd": "jude",
+    "revelation": "revelation", "rev": "revelation", "re": "revelation", "the revelation": "revelation"
+};
+
 function openSingleLink(target) {
     let rawRef = document.getElementById('reference').value.trim();
     if (!rawRef) {
@@ -112,38 +184,44 @@ function openSingleLink(target) {
         return;
     }
 
-    // --- Format Parsing ---
-    let cleanRef = rawRef.toLowerCase();
-    let parts = cleanRef.split(/\s+(?=\d)/); 
-    let book = parts[0];
-    let verses = parts[1] ? parts[1] : "";
+    // Clean input: remove periods, fix spacing, convert to lowercase
+    let cleanInput = rawRef.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
 
-    // Handle numbered books (e.g., 2 Kings, 1 John, 2 Corinthians)
-    if (!isNaN(cleanRef.charAt(0)) && cleanRef.charAt(1) === ' ') {
-        book = cleanRef.substring(0, 3).replace(" ", "_"); // base structure: "2_kings"
-        let remaining = cleanRef.substring(3).trim();
-        let remainingParts = remaining.split(/\s+(?=\d)/);
-        if(remainingParts[0]) book += remainingParts[0];
-        verses = remainingParts[1] ? remainingParts[1] : remaining;
+    // Isolate the book title from chapters/verses by splitting at the first digit encounter
+    let match = cleanInput.match(/^([a-z0-9\s]+?)\s*(\d.*)$/i);
+    
+    let typedBook = "";
+    let verses = "";
+
+    if (match) {
+        typedBook = match[1].trim();
+        verses = match[2].trim();
+    } else {
+        typedBook = cleanInput;
     }
 
-    // Keep the underscore for Bible Hub links, but strip it for Sonic Light
-    let bookSonicLight = book.replace("_", ""); // soniclight needs "2kings"
+    // Lookup structural standard name
+    let standardBook = bookMap[typedBook];
+
+    if (!standardBook) {
+        // Dynamic fallback string replacement if name isn't mapped
+        standardBook = typedBook.replace(" ", "_");
+    }
+
+    let bookSonicLight = standardBook.replace("_", ""); 
     let bibleHubVerses = verses.replace(":", "-");
 
     let finalUrl = "";
 
-    // --- URL Generation ---
     switch(target) {
         case 'sonic':
             finalUrl = `https://soniclight.com/tcon/notes/html/${bookSonicLight}/${bookSonicLight}.htm`;
             break;
         case 'bh-gen':
-            // Fixed: Now accurately targets https://biblehub.com/2_kings/3-4.htm
-            finalUrl = `https://biblehub.com/${book}/${bibleHubVerses}.htm`;
+            finalUrl = `https://biblehub.com/${standardBook}/${bibleHubVerses}.htm`;
             break;
         case 'bh-com':
-            finalUrl = `https://biblehub.com/commentaries/${book}/${bibleHubVerses}.htm`;
+            finalUrl = `https://biblehub.com/commentaries/${standardBook}/${bibleHubVerses}.htm`;
             break;
         case 'precept':
             finalUrl = `https://www.google.com/search?q=site:preceptaustin.org+${encodeURIComponent(rawRef)}`;
@@ -153,7 +231,6 @@ function openSingleLink(target) {
             break;
     }
 
-    // Open in a new tab/window
     if (finalUrl) {
         window.open(finalUrl, '_blank');
     }
