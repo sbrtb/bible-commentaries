@@ -100,7 +100,7 @@
     </div>
     
     <p class="note">
-        Accepts any standard or abbreviated Old and New Testament format (e.g., <i>1 Cor, Matt, SOS, 2 Kgs, Php, Rev</i>).
+        Accepts any standard or abbreviated Old and New Testament format. Google searches are now automatically translated to full book names.
     </p>
 </div>
 
@@ -200,16 +200,19 @@ function openSingleLink(target) {
         typedBook = cleanInput;
     }
 
-    // Lookup structural standard name
+    // Lookup structural standard name (e.g., "2_kings" or "deuteronomy")
     let standardBook = bookMap[typedBook];
 
     if (!standardBook) {
-        // Dynamic fallback string replacement if name isn't mapped
         standardBook = typedBook.replace(" ", "_");
     }
 
+    // Prepare variables for URLs
     let bookSonicLight = standardBook.replace("_", ""); 
     let bibleHubVerses = verses.replace(":", "-");
+    
+    // Create a clean readable string version for search engine strings (e.g. "2 kings 3:4")
+    let cleanSearchQuery = `${standardBook.replace("_", " ")} ${verses}`;
 
     let finalUrl = "";
 
@@ -224,10 +227,10 @@ function openSingleLink(target) {
             finalUrl = `https://biblehub.com/commentaries/${standardBook}/${bibleHubVerses}.htm`;
             break;
         case 'precept':
-            finalUrl = `https://www.google.com/search?q=site:preceptaustin.org+${encodeURIComponent(rawRef)}`;
+            finalUrl = `https://www.google.com/search?q=site:preceptaustin.org+${encodeURIComponent(cleanSearchQuery)}`;
             break;
         case 'free':
-            finalUrl = `https://www.google.com/search?q=site:freebiblecommentary.org+${encodeURIComponent(rawRef)}`;
+            finalUrl = `https://www.google.com/search?q=site:freebiblecommentary.org+${encodeURIComponent(cleanSearchQuery)}`;
             break;
     }
 
