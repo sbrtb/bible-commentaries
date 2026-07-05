@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Study Link Launcher</title>
+    
+    <!-- PWA Primary Meta Tags -->
+    <meta name="theme-color" content="#007BFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bible Launcher">
+    
+    <!-- Link to the Web Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -61,16 +71,12 @@
         }
         .btn-blue { background-color: #007BFF; }
         .btn-blue:hover { background-color: #0056b3; }
-        
         .btn-teal { background-color: #17a2b8; }
         .btn-teal:hover { background-color: #117a8b; }
-        
         .btn-orange { background-color: #fd7e14; }
         .btn-orange:hover { background-color: #da6204; }
-        
         .btn-green { background-color: #28a745; }
         .btn-green:hover { background-color: #218838; }
-
         .note {
             font-size: 12px;
             color: #777;
@@ -82,15 +88,12 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <h2>Bible Study Link Launcher</h2>
-    
     <div class="input-group">
         <label for="reference">Enter Bible Reference:</label>
         <input type="text" id="reference" placeholder="e.g., 2 Kgs 3:4, 1 Cor 13, Rev 21:1">
     </div>
-    
     <div class="button-zone">
         <button class="btn btn-blue" onclick="openSingleLink('sonic')">➔ Sonic Light (Dr. Constable)</button>
         <button class="btn btn-teal" onclick="openSingleLink('bh-gen')">➔ Bible Hub (Generic Verse)</button>
@@ -98,7 +101,6 @@
         <button class="btn btn-orange" onclick="openSingleLink('precept')">➔ Precept Austin</button>
         <button class="btn btn-green" onclick="openSingleLink('free')">➔ Free Bible Commentary</button>
     </div>
-    
     <p class="note">
         Accepts any standard or abbreviated Old and New Testament format. Google searches are now automatically translated to full book names.
     </p>
@@ -146,7 +148,6 @@ const bookMap = {
     "haggai": "haggai", "hag": "haggai", "hg": "haggai",
     "zechariah": "zechariah", "zech": "zechariah", "zec": "zechariah", "zc": "zechariah",
     "malachi": "malachi", "mal": "malachi", "ml": "malachi",
-
     // === NEW TESTAMENT ===
     "matthew": "matthew", "matt": "matthew", "mt": "matthew",
     "mark": "mark", "mrk": "mark", "mar": "mark", "mk": "mark", "mr": "mark",
@@ -169,7 +170,7 @@ const bookMap = {
     "hebrews": "hebrews", "heb": "hebrews",
     "james": "james", "jas": "james", "jm": "james",
     "1 peter": "1_peter", "1 pet": "1_peter", "1 pe": "1_peter", "1 pt": "1_peter", "1 p": "1_peter", "i pet": "1_peter", "i pt": "1_peter", "i pe": "1_peter", "1peter": "1_peter", "1pet": "1_peter", "1pe": "1_peter", "1pt": "1_peter", "1p": "1_peter", "i peter": "1_peter", "1st peter": "1_peter", "first peter": "1_peter",
-    "2 peter": "2_peter", "2 pet": "2_peter", "2 pe": "2_peter", "2 pt": "2_peter", "2 p": "2_peter", "ii peter": "2_peter", "ii pet": "2_peter", "ii pt": "2_peter", "ii pe": "2_peter", "2peter": "2_peter", "2pet": "2_peter", "2pe": "2_peter", "2pt": "2_peter", "2p": "2_peter", "2nd peter": "2_peter", "second peter": "2_peter",
+    "2 peter": "2_peter", "2 pet": "2_peter", "2 pe": "2_peter", "2 pt": "2_peter", "2 p": "2_peter", "ii peter": "2_peter", "ii pet": "2_peter", "ii pt": "2_peter", "ii pe": "2_peter", "2peter": "2_peter", "2pet": "2_peter", "2pe": "2_peter", "2pt": "2_peter", "2p": "2_peter", "2nd peter": "2_peter", "second_peter": "2_peter",
     "1 john": "1_john", "1 jhn": "1_john", "1 jn": "1_john", "1 j": "1_john", "1john": "1_john", "1jhn": "1_john", "1joh": "1_john", "1jn": "1_john", "1jo": "1_john", "1j": "1_john", "i john": "1_john", "i jhn": "1_john", "i joh": "1_john", "i jn": "1_john", "i jo": "1_john", "1st john": "1_john", "first john": "1_john",
     "2 john": "2_john", "2 jhn": "2_john", "2 jn": "2_john", "2 j": "2_john", "2john": "2_john", "2jhn": "2_john", "2joh": "2_john", "2jn": "2_john", "2jo": "2_john", "2j": "2_john", "ii john": "2_john", "ii jhn": "2_john", "ii joh": "2_john", "ii jn": "2_john", "ii jo": "2_john", "2nd john": "2_john", "second john": "2_john",
     "3 john": "3_john", "3 jhn": "3_john", "3 jn": "3_john", "3 j": "3_john", "3john": "3_john", "3jhn": "3_john", "3joh": "3_john", "3jn": "3_john", "3jo": "3_john", "3j": "3_john", "iii john": "3_john", "iii jhn": "3_john", "iii joh": "3_john", "iii jn": "3_john", "iii jo": "3_john", "3rd john": "3_john", "third john": "3_john",
@@ -183,13 +184,8 @@ function openSingleLink(target) {
         alert("Please enter a reference first.");
         return;
     }
-
-    // Clean input: remove periods, fix spacing, convert to lowercase
     let cleanInput = rawRef.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
-
-    // Isolate the book title from chapters/verses by splitting at the first digit encounter
     let match = cleanInput.match(/^([a-z0-9\s]+?)\s*(\d.*)$/i);
-    
     let typedBook = "";
     let verses = "";
 
@@ -200,20 +196,14 @@ function openSingleLink(target) {
         typedBook = cleanInput;
     }
 
-    // Lookup structural standard name (e.g., "2_kings" or "deuteronomy")
     let standardBook = bookMap[typedBook];
-
     if (!standardBook) {
         standardBook = typedBook.replace(" ", "_");
     }
 
-    // Prepare variables for URLs
     let bookSonicLight = standardBook.replace("_", ""); 
-    let bibleHubVerses = verses.replace(":", "-");
-    
-    // Create a clean readable string version for search engine strings (e.g. "2 kings 3:4")
+    let bibleHubVerses = verses.replace(":", "-");        
     let cleanSearchQuery = `${standardBook.replace("_", " ")} ${verses}`;
-
     let finalUrl = "";
 
     switch(target) {
@@ -238,7 +228,15 @@ function openSingleLink(target) {
         window.open(finalUrl, '_blank');
     }
 }
-</script>
 
+// Register the Service Worker for PWA compliance
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker registered successfully.', reg.scope))
+            .catch(err => console.log('Service Worker registration failed:', err));
+    });
+}
+</script>
 </body>
 </html>
