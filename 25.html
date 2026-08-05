@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A 25-day interactive challenge comparing seven major English Bible translations.">
+  <title>25-Day Bible Translation Challenge</title>
+</head>
+<body>
+<div id="translation-challenge-app">
+  <style>
+    :root {
+      --bg: #f7f4ed;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #64748b;
+      --line: #d8dee8;
+      --accent: #6d4c2f;
+      --accent-2: #efe5d7;
+      --good: #166534;
+      --warn: #92400e;
+      --danger: #991b1b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, select, textarea, input { font: inherit; }
+
+    .shell {
+      width: min(1080px, calc(100% - 24px));
+      margin: 24px auto 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #2f241d, #6d4c2f);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      color: #f7eee5;
+      line-height: 1.6;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .summary-item {
+      background: rgba(255,255,255,.11);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      padding: 13px;
+    }
+
+    .summary-item strong {
+      display: block;
+      font-size: 1.25rem;
+    }
+
+    .summary-item span {
+      color: #eadfd4;
+      font-size: .87rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .sidebar {
+      padding: 16px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .sidebar h2,
+    .content h2,
+    .content h3 {
+      margin-top: 0;
+    }
+
+    .progress-track {
+      height: 10px;
+      background: #e8edf3;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+
+    .day-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .day-button {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 4px;
+      cursor: pointer;
+      min-height: 39px;
+    }
+
+    .day-button:hover { border-color: var(--accent); }
+    .day-button.current {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .day-button.completed:not(.current) {
+      background: #edf7ef;
+      border-color: #a7d7b0;
+      color: var(--good);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .content {
+      padding: 22px;
+      min-width: 0;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: .78rem;
+      margin-bottom: 6px;
+    }
+
+    .passage {
+      font-size: 1.32rem;
+      font-weight: 750;
+      margin: 0 0 4px;
+    }
+
+    .theme {
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .callout {
+      background: var(--accent-2);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 16px;
+      line-height: 1.55;
+      margin: 16px 0;
+    }
+
+    .translation-links {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0 22px;
+    }
+
+    .translation-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 8px;
+      font-weight: 650;
+    }
+
+    .translation-link:hover {
+      border-color: var(--accent);
+      background: #faf7f2;
+    }
+
+    .question {
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .question:first-of-type { border-top: 0; }
+
+    .question label.title {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.45;
+      margin: 4px 0 10px;
+    }
+
+    select, textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 11px 12px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    .rating {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .rating label {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 4px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .rating input { margin-right: 4px; }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 750;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .button.secondary {
+      background: #eef2f6;
+      color: var(--ink);
+    }
+
+    .button.danger {
+      background: #fff0f0;
+      color: var(--danger);
+      border: 1px solid #f0b8b8;
+    }
+
+    .button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 12px;
+      color: var(--good);
+      min-height: 22px;
+      font-weight: 650;
+    }
+
+    .results {
+      display: none;
+    }
+
+    .result-hero {
+      background: #f5efe7;
+      border: 1px solid #ddc9b5;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .winner {
+      font-size: clamp(1.7rem, 4vw, 2.7rem);
+      margin: 4px 0 8px;
+      color: #4b3424;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 66px minmax(0, 1fr) 52px;
+      gap: 10px;
+      align-items: center;
+      margin: 11px 0;
+    }
+
+    .score-bar {
+      height: 10px;
+      background: #e8edf3;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .score-bar > span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .use-case {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .use-case h4 {
+      margin: 0 0 5px;
+    }
+
+    .privacy {
+      margin-top: 18px;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cookie-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fafafa;
+    }
+
+    .cookie-box label {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 840px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .translation-links { grid-template-columns: repeat(2, 1fr); }
+      .day-list { grid-template-columns: repeat(10, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 14px, 1080px); margin-top: 8px; }
+      .hero, .content { padding: 18px; }
+      .day-list { grid-template-columns: repeat(5, 1fr); }
+      .rating { grid-template-columns: 1fr; }
+      .rating label { text-align: left; padding: 10px; }
+      .use-case-grid { grid-template-columns: 1fr; }
+      .score-row { grid-template-columns: 52px minmax(0,1fr) 44px; }
+    }
+  </style>
+
+  <div class="shell">
+    <section class="hero">
+      <h1>25-Day Bible Translation Challenge</h1>
+      <p>Read the same passage each day in the NIV, KJV, ESV, NLT, NKJV, CSB and NASB. Record what you notice, compare translation choices, and receive a personalized recommendation at the end.</p>
+
+      <div class="summary-grid" aria-label="Challenge summary">
+        <div class="summary-item"><strong>25</strong><span>days of comparison</span></div>
+        <div class="summary-item"><strong>7</strong><span>major translations</span></div>
+        <div class="summary-item"><strong id="heroCompleted">0</strong><span>days completed</span></div>
+        <div class="summary-item"><strong id="heroPercent">0%</strong><span>overall progress</span></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="panel sidebar">
+        <h2>Your progress</h2>
+        <div><strong id="progressLabel">0 of 25 days</strong></div>
+        <div class="progress-track" aria-hidden="true">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <div class="helper">A day counts as complete after you choose an overall favorite, a clarity winner and a study winner.</div>
+
+        <div id="dayList" class="day-list" aria-label="Choose a day"></div>
+
+        <div class="sidebar-actions">
+          <button id="showResultsButton" class="button primary" type="button">See current recommendation</button>
+          <button id="exportButton" class="button secondary" type="button">Export my notes</button>
+          <button id="resetButton" class="button danger" type="button">Reset challenge</button>
+        </div>
+
+        <div class="cookie-box">
+          <label>
+            <input id="cookieBackup" type="checkbox">
+            <span>Use a small functional cookie as a backup for the current day and completion count. Full answers remain in local storage.</span>
+          </label>
+        </div>
+
+        <p class="privacy">Your answers stay in this browser. No account, analytics or server transmission is used by this standalone file.</p>
+      </aside>
+
+      <main class="panel content">
+        <section id="challengeView">
+          <div class="eyebrow" id="dayNumber">Day 1</div>
+          <h2 class="passage" id="passage"></h2>
+          <p class="theme" id="theme"></p>
+
+          <div class="callout">
+            <strong>What to watch for:</strong>
+            <span id="focus"></span>
+          </div>
+
+          <p id="task"></p>
+
+          <div>
+            <strong>Open the passage in each translation</strong>
+            <p class="helper">These links open Bible Gateway in a new tab. Published translations remain subject to their publishers’ copyright and quotation policies.</p>
+            <div id="translationLinks" class="translation-links"></div>
+          </div>
+
+          <div class="question">
+            <label class="title" for="favorite">1. Which translation did you prefer overall today?</label>
+            <select id="favorite"></select>
+          </div>
+
+          <div class="question">
+            <label class="title" for="clarity">2. Which translation communicated the meaning most clearly?</label>
+            <select id="clarity"></select>
+          </div>
+
+          <div class="question">
+            <label class="title" for="study">3. Which translation would you trust most for close study or sermon preparation?</label>
+            <select id="study"></select>
+          </div>
+
+          <div class="question">
+            <label class="title" for="priority">4. Which quality mattered most in this passage?</label>
+            <select id="priority">
+              <option value="">Choose one…</option>
+              <option value="clarity">Immediate clarity</option>
+              <option value="balance">Balance of accuracy and readability</option>
+              <option value="literal">Visible connection to the original wording</option>
+              <option value="literary">Literary beauty and memorability</option>
+              <option value="traditional">Traditional wording and historic continuity</option>
+              <option value="textual">Transparency about manuscript differences</option>
+              <option value="public">Natural public reading and teaching</option>
+            </select>
+          </div>
+
+          <div class="question">
+            <label class="title">5. How easy was your favorite translation to understand?</label>
+            <div class="rating" id="easeRating">
+              <label><input type="radio" name="ease" value="1">1 — difficult</label>
+              <label><input type="radio" name="ease" value="2">2</label>
+              <label><input type="radio" name="ease" value="3">3</label>
+              <label><input type="radio" name="ease" value="4">4</label>
+              <label><input type="radio" name="ease" value="5">5 — effortless</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <label class="title" for="notes">6. What wording or translation decision stood out?</label>
+            <textarea id="notes" placeholder="Example: The KJV preserved singular and plural pronouns; the NLT made the argument easiest to follow…"></textarea>
+          </div>
+
+          <div class="nav-row">
+            <button id="previousButton" class="button secondary" type="button">Previous day</button>
+            <button id="saveButton" class="button primary" type="button">Save this day</button>
+            <button id="nextButton" class="button secondary" type="button">Next day</button>
+          </div>
+          <div id="saveStatus" class="status" aria-live="polite"></div>
+        </section>
+
+        <section id="resultsView" class="results" aria-live="polite">
+          <div class="eyebrow">Your current result</div>
+          <div class="result-hero">
+            <div>Best overall match</div>
+            <h2 id="winnerName" class="winner"></h2>
+            <p id="winnerExplanation"></p>
+          </div>
+
+          <h3>Score by translation</h3>
+          <div id="scoreList"></div>
+
+          <h3 style="margin-top:24px;">Recommended translation set</h3>
+          <div id="useCaseGrid" class="use-case-grid"></div>
+
+          <div class="callout" id="completionMessage"></div>
+
+          <div class="nav-row">
+            <button id="backToChallengeButton" class="button secondary" type="button">Return to challenge</button>
+            <button id="resultExportButton" class="button primary" type="button">Export result and notes</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const translations = [
+        { code: "NIV", name: "New International Version" },
+        { code: "KJV", name: "King James Version" },
+        { code: "ESV", name: "English Standard Version" },
+        { code: "NLT", name: "New Living Translation" },
+        { code: "NKJV", name: "New King James Version" },
+        { code: "CSB", name: "Christian Standard Bible" },
+        { code: "NASB", name: "New American Standard Bible" }
+      ];
+
+      const days = [
+        {
+          passage: "John 3:16",
+          theme: "The Son’s uniqueness",
+          focus: "Compare “only begotten Son,” “only Son,” and “one and only Son.” Ask whether the translation preserves historic theological language, lexical precision, or immediate clarity.",
+          task: "Read the verse aloud in all seven translations. Then explain monogenēs in one sentence without borrowing the exact wording of any version."
+        },
+        {
+          passage: "Acts 8:26–40",
+          theme: "A major textual variant",
+          focus: "Notice whether verse 37 appears in the main text, in brackets, in a footnote, or not at all. Distinguish translation philosophy from manuscript choice.",
+          task: "Check the main text and footnotes. Record which edition is most transparent about the variant and which presentation you find most useful."
+        },
+        {
+          passage: "Luke 22:31–34",
+          theme: "Singular and plural “you”",
+          focus: "The KJV distinguishes plural “you” from singular “thee.” Modern translations may add “all of you” or a name to recover the distinction.",
+          task: "Identify exactly whom Satan seeks to sift and for whom Jesus specifically prays. Decide which translation makes the shift clearest."
+        },
+        {
+          passage: "John 3:1–8",
+          theme: "“Thee” and “ye” in context",
+          focus: "In verse 7, Jesus speaks to Nicodemus individually and then gives a statement applying more broadly. Watch how each translation signals—or loses—that shift.",
+          task: "Read the whole paragraph, not just verse 7. Note whether the translation makes the scope of Jesus’ statement obvious."
+        },
+        {
+          passage: "1 Peter 2:4–8",
+          theme: "Chief cornerstone or cornerstone",
+          focus: "Compare “chief corner stone,” “chief cornerstone,” and “cornerstone.” Consider whether adding “chief” clarifies Christ’s supremacy or adds an unnecessary English modifier.",
+          task: "Read the quotation in its paragraph. Choose the wording that best preserves both the architectural image and Christological force."
+        },
+        {
+          passage: "Joshua 1:7–9",
+          theme: "Mouth, meditation and obedience",
+          focus: "Compare “shall not depart from thy mouth,” “keep…on your lips,” and “study…continually.” Watch how the Hebrew image moves from speech to meditation to obedience.",
+          task: "Choose the translation that best preserves the progression without becoming obscure in modern English."
+        },
+        {
+          passage: "Romans 8:18–30",
+          theme: "Waiting, foreknowledge and predestination",
+          focus: "Observe “wait patiently,” “eagerly wait…with perseverance,” and the handling of “foreknew” and “predestined.”",
+          task: "First assess verses 24–25 for emotional force, then verses 28–30 for theological precision. Your winners may be different."
+        },
+        {
+          passage: "John 6:60–69",
+          theme: "Words of eternal life",
+          focus: "Compare “words of eternal life,” “the words of eternal life,” and “words that give eternal life.”",
+          task: "Decide whether you prefer a translation that preserves the compact Greek phrase or one that states its implied meaning explicitly."
+        },
+        {
+          passage: "Psalm 23",
+          theme: "Poetry, rhythm and memorability",
+          focus: "This day is less about technical vocabulary and more about cadence, imagery, emotional resonance and suitability for memorization or pastoral care.",
+          task: "Read every version aloud. Select the one you would most willingly memorize and the one you would read at a funeral or hospital bedside."
+        },
+        {
+          passage: "Psalm 1",
+          theme: "Blessed, happy and meditation",
+          focus: "Compare “blessed” with “happy,” and observe how each translation handles counsel, path, seat, delight and meditation.",
+          task: "Decide which version best preserves the poem’s structure and which best communicates its message to a new reader."
+        },
+        {
+          passage: "Isaiah 53:1–6",
+          theme: "Prophecy, poetry and doctrinal precision",
+          focus: "Watch the wording of griefs, sorrows, diseases, transgressions, iniquities and the healing statement in verse 5.",
+          task: "Identify where a translation remains concrete and where it interprets imagery. Choose one for preaching and one for evangelistic reading."
+        },
+        {
+          passage: "Matthew 5:17–26",
+          theme: "Textual detail and ethical force",
+          focus: "Check Matthew 5:22 for wording such as “without a cause” and compare how anger, insult and judgment are expressed.",
+          task: "Read footnotes carefully. Record whether the edition clearly distinguishes a textual variant from a translation decision."
+        },
+        {
+          passage: "Matthew 6:9–13",
+          theme: "The Lord’s Prayer",
+          focus: "Compare traditional liturgical wording, modern syntax and the treatment of the doxology. Consider memorization and congregational recitation.",
+          task: "Choose the version you would teach to a congregation and the one you would use for detailed exposition."
+        },
+        {
+          passage: "Luke 2:8–14",
+          theme: "Peace and divine favor",
+          focus: "Compare “good will toward men” with renderings such as peace among those favored by God. This involves both manuscript evidence and grammar.",
+          task: "Note which translation explains the issue in a footnote and which wording you think communicates the passage most responsibly."
+        },
+        {
+          passage: "Mark 1:1–8",
+          theme: "Isaiah the prophet or the prophets",
+          focus: "Verse 2 introduces a combined quotation from Malachi and Isaiah. Compare how each translation handles the attribution and any textual note.",
+          task: "Assess whether the translation prioritizes the traditional wording, the earliest recoverable text, or explanatory clarity."
+        },
+        {
+          passage: "John 1:1–18",
+          theme: "The Word, grace and the unique Son",
+          focus: "Watch “only begotten Son,” “only Son,” “one and only Son,” and any variant in verse 18 involving “God” or “Son.”",
+          task: "Choose the translation that best balances theological density, readability and transparency about the Greek text."
+        },
+        {
+          passage: "Philippians 2:5–11",
+          theme: "The humiliation and exaltation of Christ",
+          focus: "Compare “form of God,” “equality with God,” “robbery,” “something to be grasped,” and more interpretive descriptions.",
+          task: "Trace the movement from Christ’s preexistence to servanthood, death and exaltation. Decide which version best preserves the logic."
+        },
+        {
+          passage: "Colossians 1:15–20",
+          theme: "Firstborn and supremacy",
+          focus: "Observe how “firstborn of all creation” is retained and how the following clauses clarify supremacy rather than creaturehood.",
+          task: "Choose the translation that lets the argument explain its own terminology without over-paraphrasing."
+        },
+        {
+          passage: "1 Timothy 3:14–16",
+          theme: "Manifested in the flesh",
+          focus: "Compare “God was manifest in the flesh” with “He who was revealed” or similar wording, and inspect textual notes.",
+          task: "Separate the doctrinal truth of the incarnation from the narrower question of which Greek reading the translation prints."
+        },
+        {
+          passage: "Hebrews 4:12–16",
+          theme: "Vivid imagery and complex syntax",
+          focus: "Compare the sword image, “soul and spirit,” the exposure of the creature, and the transition to Jesus the high priest.",
+          task: "Choose one version for close syntactical study and another for powerful public reading."
+        },
+        {
+          passage: "James 2:14–26",
+          theme: "Faith, works and argument flow",
+          focus: "This passage tests whether a translation can preserve repeated terminology while making a difficult argument easy to follow.",
+          task: "Track every occurrence of faith, works, justify, dead and perfect/complete. Note where a paraphrase helps or prejudges interpretation."
+        },
+        {
+          passage: "Romans 3:21–28",
+          theme: "Justification vocabulary",
+          focus: "Compare righteousness, justification, redemption, propitiation/atoning sacrifice and “faith in Jesus Christ” language.",
+          task: "Choose the version you would use to define doctrine and the one you would give to someone encountering Paul for the first time."
+        },
+        {
+          passage: "Ecclesiastes 12:9–14",
+          theme: "Wisdom, duty and literary voice",
+          focus: "Observe “the whole duty of man,” “the duty of all mankind,” or other renderings. Consider whether the translation preserves ambiguity or resolves it.",
+          task: "Read it as a conclusion to the entire book. Choose the version with the strongest combination of gravity and clarity."
+        },
+        {
+          passage: "Revelation 22:12–21",
+          theme: "Final textual and stylistic test",
+          focus: "Check verse 14 for “do his commandments” versus “wash their robes,” and observe “book of life” versus “tree of life” in verse 19.",
+          task: "Evaluate both manuscript transparency and the ability to read apocalyptic language with solemnity and force."
+        },
+        {
+          passage: "Psalm 103:1–5; Romans 12:1–2; John 14:1–6",
+          theme: "Final three-genre comparison",
+          focus: "Today you compare poetry, doctrinal exhortation and Gospel discourse. A translation that wins one genre may not win another.",
+          task: "Read all three selections in every version. Make your final choices based on the translation you could actually use consistently—not merely the one that wins a single famous verse."
+        }
+      ];
+
+      const translationProfiles = {
+        NIV: {
+          title: "New International Version",
+          summary: "Your answers favor a dependable all-purpose translation that balances accuracy, readability and broad church usability.",
+          best: "Best as a primary Bible for daily reading, general teaching and readers who want one translation for most tasks."
+        },
+        KJV: {
+          title: "King James Version",
+          summary: "Your answers strongly value historic continuity, memorable cadence, traditional terminology and grammatical distinctions such as thou/ye.",
+          best: "Best for traditional worship, memorization, literary study and readers committed to the historic English and Textus Receptus tradition."
+        },
+        ESV: {
+          title: "English Standard Version",
+          summary: "Your answers favor an essentially literal modern translation with strong literary form and stable theological vocabulary.",
+          best: "Best for expository preaching, memorization and serious study without the full stiffness of a maximally literal translation."
+        },
+        NLT: {
+          title: "New Living Translation",
+          summary: "Your answers prioritize immediate understanding, natural English and the ability to grasp a passage’s force without decoding difficult syntax.",
+          best: "Best for devotional reading, evangelism, new believers, younger readers and reading large portions quickly."
+        },
+        NKJV: {
+          title: "New King James Version",
+          summary: "Your answers favor the traditional text and cadence of the KJV while preferring substantially modern vocabulary and useful textual notes.",
+          best: "Best for readers who value the KJV tradition, public reading and Textus Receptus comparison without consistently archaic grammar."
+        },
+        CSB: {
+          title: "Christian Standard Bible",
+          summary: "Your answers favor modern teaching clarity while still preserving enough formal structure for study and exposition.",
+          best: "Best for preaching, discipleship, public reading and churches that want a flexible middle position between literal and dynamic translation."
+        },
+        NASB: {
+          title: "New American Standard Bible",
+          summary: "Your answers prioritize close correspondence to Hebrew and Greek wording, repeated terms and grammatical structure.",
+          best: "Best for detailed exegesis, original-language comparison and analytical sermon preparation, often as a study translation."
+        }
+      };
+
+      const traitWeights = {
+        clarity: { NLT: 4, NIV: 3, CSB: 3, NKJV: 1, ESV: 1, NASB: 0, KJV: 0 },
+        balance: { NIV: 4, CSB: 4, ESV: 2, NKJV: 2, NLT: 1, NASB: 1, KJV: 1 },
+        literal: { NASB: 4, ESV: 3, NKJV: 3, KJV: 2, CSB: 2, NIV: 1, NLT: 0 },
+        literary: { KJV: 4, NKJV: 3, ESV: 3, NIV: 1, CSB: 1, NASB: 1, NLT: 1 },
+        traditional: { KJV: 4, NKJV: 4, ESV: 1, NASB: 1, NIV: 0, CSB: 0, NLT: 0 },
+        textual: { NKJV: 4, NASB: 3, ESV: 2, NIV: 2, CSB: 2, KJV: 1, NLT: 1 },
+        public: { CSB: 4, NIV: 3, NLT: 3, NKJV: 2, ESV: 2, KJV: 1, NASB: 1 }
+      };
+
+      const storageKey = "bibleTranslationChallengeV1";
+      let state = {
+        currentDay: 0,
+        answers: {},
+        cookieBackup: false
+      };
+
+      const elements = {
+        dayList: document.getElementById("dayList"),
+        dayNumber: document.getElementById("dayNumber"),
+        passage: document.getElementById("passage"),
+        theme: document.getElementById("theme"),
+        focus: document.getElementById("focus"),
+        task: document.getElementById("task"),
+        translationLinks: document.getElementById("translationLinks"),
+        favorite: document.getElementById("favorite"),
+        clarity: document.getElementById("clarity"),
+        study: document.getElementById("study"),
+        priority: document.getElementById("priority"),
+        notes: document.getElementById("notes"),
+        easeInputs: Array.from(document.querySelectorAll('input[name="ease"]')),
+        previousButton: document.getElementById("previousButton"),
+        nextButton: document.getElementById("nextButton"),
+        saveButton: document.getElementById("saveButton"),
+        saveStatus: document.getElementById("saveStatus"),
+        progressLabel: document.getElementById("progressLabel"),
+        progressFill: document.getElementById("progressFill"),
+        heroCompleted: document.getElementById("heroCompleted"),
+        heroPercent: document.getElementById("heroPercent"),
+        challengeView: document.getElementById("challengeView"),
+        resultsView: document.getElementById("resultsView"),
+        winnerName: document.getElementById("winnerName"),
+        winnerExplanation: document.getElementById("winnerExplanation"),
+        scoreList: document.getElementById("scoreList"),
+        useCaseGrid: document.getElementById("useCaseGrid"),
+        completionMessage: document.getElementById("completionMessage"),
+        showResultsButton: document.getElementById("showResultsButton"),
+        backToChallengeButton: document.getElementById("backToChallengeButton"),
+        exportButton: document.getElementById("exportButton"),
+        resultExportButton: document.getElementById("resultExportButton"),
+        resetButton: document.getElementById("resetButton"),
+        cookieBackup: document.getElementById("cookieBackup")
+      };
+
+      function blankOptions() {
+        return '<option value="">Choose one…</option>' +
+          translations.map(t => `<option value="${t.code}">${t.code} — ${t.name}</option>`).join("");
+      }
+
+      function loadState() {
+        try {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            state = {
+              currentDay: Number.isInteger(parsed.currentDay) ? parsed.currentDay : 0,
+              answers: parsed.answers || {},
+              cookieBackup: Boolean(parsed.cookieBackup)
+            };
+          }
+        } catch (error) {
+          console.warn("Could not load saved challenge state.", error);
+        }
+
+        state.currentDay = Math.max(0, Math.min(days.length - 1, state.currentDay));
+        elements.cookieBackup.checked = state.cookieBackup;
+      }
+
+      function compactCookieData() {
+        return JSON.stringify({
+          d: state.currentDay,
+          c: completedCount(),
+          t: Date.now()
+        });
+      }
+
+      function setBackupCookie() {
+        if (!state.cookieBackup) {
+          document.cookie = "btc_backup=; Max-Age=0; Path=/; SameSite=Lax";
+          return;
+        }
+        const encoded = encodeURIComponent(compactCookieData());
+        document.cookie = `btc_backup=${encoded}; Max-Age=31536000; Path=/; SameSite=Lax`;
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(state));
+          setBackupCookie();
+        } catch (error) {
+          elements.saveStatus.textContent = "Your browser blocked local storage. Progress may not persist.";
+          elements.saveStatus.style.color = "var(--danger)";
+          console.warn(error);
+        }
+      }
+
+      function getDayAnswer(index) {
+        return state.answers[String(index)] || {
+          favorite: "",
+          clarity: "",
+          study: "",
+          priority: "",
+          ease: "",
+          notes: ""
+        };
+      }
+
+      function isComplete(answer) {
+        return Boolean(answer.favorite && answer.clarity && answer.study);
+      }
+
+      function completedCount() {
+        return Object.values(state.answers).filter(isComplete).length;
+      }
+
+      function updateProgress() {
+        const completed = completedCount();
+        const percent = Math.round((completed / days.length) * 100);
+        elements.progressLabel.textContent = `${completed} of ${days.length} days`;
+        elements.progressFill.style.width = `${percent}%`;
+        elements.heroCompleted.textContent = String(completed);
+        elements.heroPercent.textContent = `${percent}%`;
+
+        Array.from(elements.dayList.children).forEach((button, index) => {
+          button.classList.toggle("current", index === state.currentDay);
+          button.classList.toggle("completed", isComplete(getDayAnswer(index)));
+        });
+      }
+
+      function buildDayButtons() {
+        elements.dayList.innerHTML = "";
+        days.forEach((day, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "day-button";
+          button.textContent = String(index + 1);
+          button.title = `Day ${index + 1}: ${day.passage}`;
+          button.addEventListener("click", () => {
+            captureCurrentForm(false);
+            state.currentDay = index;
+            saveState();
+            renderDay();
+          });
+          elements.dayList.appendChild(button);
+        });
+      }
+
+      function buildTranslationLinks(passage) {
+        const encodedPassage = encodeURIComponent(passage);
+        elements.translationLinks.innerHTML = "";
+        translations.forEach(t => {
+          const link = document.createElement("a");
+          link.className = "translation-link";
+          link.href = `https://www.biblegateway.com/passage/?search=${encodedPassage}&version=${encodeURIComponent(t.code)}`;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = t.code;
+          link.title = `Open ${passage} in the ${t.name}`;
+          elements.translationLinks.appendChild(link);
+        });
+      }
+
+      function renderDay() {
+        const day = days[state.currentDay];
+        const answer = getDayAnswer(state.currentDay);
+
+        elements.challengeView.style.display = "";
+        elements.resultsView.style.display = "none";
+        elements.dayNumber.textContent = `Day ${state.currentDay + 1} of ${days.length}`;
+        elements.passage.textContent = day.passage;
+        elements.theme.textContent = day.theme;
+        elements.focus.textContent = " " + day.focus;
+        elements.task.textContent = day.task;
+        buildTranslationLinks(day.passage);
+
+        elements.favorite.value = answer.favorite || "";
+        elements.clarity.value = answer.clarity || "";
+        elements.study.value = answer.study || "";
+        elements.priority.value = answer.priority || "";
+        elements.notes.value = answer.notes || "";
+        elements.easeInputs.forEach(input => {
+          input.checked = input.value === String(answer.ease || "");
+        });
+
+        elements.previousButton.disabled = state.currentDay === 0;
+        elements.nextButton.disabled = state.currentDay === days.length - 1;
+        elements.saveStatus.textContent = isComplete(answer) ? "Saved and counted as complete." : "";
+        elements.saveStatus.style.color = "var(--good)";
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function captureCurrentForm(showMessage) {
+        const ease = elements.easeInputs.find(input => input.checked);
+        const answer = {
+          favorite: elements.favorite.value,
+          clarity: elements.clarity.value,
+          study: elements.study.value,
+          priority: elements.priority.value,
+          ease: ease ? ease.value : "",
+          notes: elements.notes.value.trim()
+        };
+
+        state.answers[String(state.currentDay)] = answer;
+        saveState();
+        updateProgress();
+
+        if (showMessage) {
+          if (isComplete(answer)) {
+            elements.saveStatus.textContent = "Saved. This day now counts toward your result.";
+            elements.saveStatus.style.color = "var(--good)";
+          } else {
+            elements.saveStatus.textContent = "Saved, but choose an overall favorite, clarity winner and study winner to complete this day.";
+            elements.saveStatus.style.color = "var(--warn)";
+          }
+        }
+      }
+
+      function calculateScores() {
+        const scores = Object.fromEntries(translations.map(t => [t.code, 0]));
+
+        Object.values(state.answers).forEach(answer => {
+          if (!answer) return;
+
+          if (answer.favorite) scores[answer.favorite] += 6;
+          if (answer.clarity) scores[answer.clarity] += 4;
+          if (answer.study) scores[answer.study] += 4;
+
+          if (answer.priority && traitWeights[answer.priority]) {
+            Object.entries(traitWeights[answer.priority]).forEach(([code, points]) => {
+              scores[code] += points;
+            });
+          }
+
+          const ease = Number(answer.ease || 0);
+          if (answer.favorite && ease) {
+            scores[answer.favorite] += Math.max(0, ease - 2);
+          }
+        });
+
+        return scores;
+      }
+
+      function chooseBestForRole(role, scores) {
+        const roleWeights = {
+          primary: { NIV: 5, CSB: 5, ESV: 3, NKJV: 3, NLT: 3, NASB: 2, KJV: 2 },
+          study: { NASB: 5, ESV: 5, NKJV: 4, KJV: 3, CSB: 3, NIV: 2, NLT: 1 },
+          clarity: { NLT: 5, NIV: 4, CSB: 4, NKJV: 2, ESV: 2, NASB: 1, KJV: 1 },
+          tradition: { KJV: 5, NKJV: 5, ESV: 2, NASB: 2, NIV: 1, CSB: 1, NLT: 1 }
+        };
+
+        return translations
+          .map(t => ({
+            code: t.code,
+            value: (scores[t.code] || 0) + roleWeights[role][t.code] * 2
+          }))
+          .sort((a, b) => b.value - a.value)[0].code;
+      }
+
+      function showResults() {
+        captureCurrentForm(false);
+        const scores = calculateScores();
+        const ranked = translations
+          .map(t => ({ ...t, score: scores[t.code] }))
+          .sort((a, b) => b.score - a.score);
+
+        const winner = ranked[0];
+        const maxScore = Math.max(1, winner.score);
+        const completed = completedCount();
+
+        elements.challengeView.style.display = "none";
+        elements.resultsView.style.display = "block";
+        elements.winnerName.textContent = `${winner.code} — ${translationProfiles[winner.code].title}`;
+        elements.winnerExplanation.textContent = translationProfiles[winner.code].summary;
+
+        elements.scoreList.innerHTML = ranked.map(item => {
+          const percent = Math.round((item.score / maxScore) * 100);
+          return `
+            <div class="score-row">
+              <strong>${item.code}</strong>
+              <div class="score-bar" aria-label="${item.name}: ${item.score} points">
+                <span style="width:${percent}%"></span>
+              </div>
+              <span>${item.score}</span>
+            </div>
+          `;
+        }).join("");
+
+        const roles = [
+          ["Primary Bible", chooseBestForRole("primary", scores)],
+          ["Detailed study", chooseBestForRole("study", scores)],
+          ["Clarity / outreach", chooseBestForRole("clarity", scores)],
+          ["Tradition / memorization", chooseBestForRole("tradition", scores)]
+        ];
+
+        elements.useCaseGrid.innerHTML = roles.map(([label, code]) => `
+          <article class="use-case">
+            <h4>${label}: ${code}</h4>
+            <p>${translationProfiles[code].best}</p>
+          </article>
+        `).join("");
+
+        if (completed === 25) {
+          elements.completionMessage.innerHTML = `<strong>Challenge complete.</strong> Your result is based on all 25 days. Treat the winner as your best primary match, not as a claim that every other translation is inferior.`;
+        } else if (completed === 0) {
+          elements.completionMessage.innerHTML = `<strong>No completed days yet.</strong> This preview is not meaningful until you complete several comparisons.`;
+        } else {
+          elements.completionMessage.innerHTML = `<strong>Provisional result:</strong> you have completed ${completed} of 25 days. The recommendation will become more reliable as you compare more genres and textual questions.`;
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function exportReport() {
+        captureCurrentForm(false);
+        const scores = calculateScores();
+        const ranked = translations
+          .map(t => ({ ...t, score: scores[t.code] }))
+          .sort((a, b) => b.score - a.score);
+
+        const lines = [
+          "25-DAY BIBLE TRANSLATION CHALLENGE",
+          "==================================",
+          "",
+          `Completed: ${completedCount()} of ${days.length} days`,
+          `Current recommendation: ${ranked[0].code} — ${ranked[0].name}`,
+          "",
+          "SCORES",
+          ...ranked.map(t => `${t.code}: ${t.score}`),
+          "",
+          "DAILY ANSWERS"
+        ];
+
+        days.forEach((day, index) => {
+          const answer = getDayAnswer(index);
+          lines.push(
+            "",
+            `DAY ${index + 1}: ${day.passage} — ${day.theme}`,
+            `Overall favorite: ${answer.favorite || "—"}`,
+            `Clarity winner: ${answer.clarity || "—"}`,
+            `Study winner: ${answer.study || "—"}`,
+            `Main priority: ${answer.priority || "—"}`,
+            `Ease: ${answer.ease || "—"}/5`,
+            `Notes: ${answer.notes || "—"}`
+          );
+        });
+
+        const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "bible-translation-challenge-results.txt";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function resetChallenge() {
+        const confirmed = window.confirm("Reset all 25 days, scores and notes? This cannot be undone.");
+        if (!confirmed) return;
+
+        state = { currentDay: 0, answers: {}, cookieBackup: false };
+        try { localStorage.removeItem(storageKey); } catch (error) {}
+        document.cookie = "btc_backup=; Max-Age=0; Path=/; SameSite=Lax";
+        elements.cookieBackup.checked = false;
+        renderDay();
+      }
+
+      elements.favorite.innerHTML = blankOptions();
+      elements.clarity.innerHTML = blankOptions();
+      elements.study.innerHTML = blankOptions();
+
+      elements.saveButton.addEventListener("click", () => captureCurrentForm(true));
+      elements.previousButton.addEventListener("click", () => {
+        captureCurrentForm(false);
+        if (state.currentDay > 0) {
+          state.currentDay -= 1;
+          saveState();
+          renderDay();
+        }
+      });
+      elements.nextButton.addEventListener("click", () => {
+        captureCurrentForm(false);
+        if (state.currentDay < days.length - 1) {
+          state.currentDay += 1;
+          saveState();
+          renderDay();
+        }
+      });
+      elements.showResultsButton.addEventListener("click", showResults);
+      elements.backToChallengeButton.addEventListener("click", renderDay);
+      elements.exportButton.addEventListener("click", exportReport);
+      elements.resultExportButton.addEventListener("click", exportReport);
+      elements.resetButton.addEventListener("click", resetChallenge);
+      elements.cookieBackup.addEventListener("change", () => {
+        state.cookieBackup = elements.cookieBackup.checked;
+        saveState();
+      });
+
+      loadState();
+      buildDayButtons();
+      renderDay();
+    })();
+  </script>
+</div>
+
+</body>
+</html>
