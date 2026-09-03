@@ -79,6 +79,10 @@
         .btn-green:hover { background-color: #218838; }
         .btn-navy { background-color: #004085; }
         .btn-navy:hover { background-color: #002752; }
+        .btn-purple { background-color: #6f42c1; }
+        .btn-purple:hover { background-color: #593196; }
+        .btn-red { background-color: #dc3545; }
+        .btn-red:hover { background-color: #bd2130; }
         .note {
             font-size: 12px;
             color: #777;
@@ -103,6 +107,8 @@
         <button class="btn btn-navy" onclick="openSingleLink('blb')">➤ Blue Letter Bible (KJV)</button>
         <button class="btn btn-orange" onclick="openSingleLink('precept')">➤ Precept Austin</button>
         <button class="btn btn-green" onclick="openSingleLink('free')">➤ Free Bible Commentary</button>
+        <button class="btn btn-purple" onclick="openSingleLink('reformation')">➤ Reformation Study Bible</button>
+        <button class="btn btn-red" onclick="openSingleLink('wiersbe')">➤ Wiersbe Be Bible Study</button>
     </div>
     <p class="note">
         Accepts any standard or abbreviated Old and New Testament format. Google searches are now automatically translated to full book names.
@@ -242,6 +248,12 @@ function openSingleLink(target) {
             break;
         case 'free':
             finalUrl = `https://www.google.com/search?q=site:freebiblecommentary.org+${encodeURIComponent(cleanSearchQuery)}`;
+            break;
+        case 'reformation':
+            finalUrl = `https://www.google.com/search?q=site:biblegateway.com/resources/reformation-study-bible/+${encodeURIComponent(cleanSearchQuery)}`;
+            break;
+        case 'wiersbe':
+            finalUrl = `https://www.google.com/search?q=site:biblegateway.com/resources/wiersbe-be-bible-study/+${encodeURIComponent(cleanSearchQuery)}`;
             break;
     }
 
