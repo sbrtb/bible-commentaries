@@ -17,7 +17,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 50px;
+            margin: 40px 20px;
             background-color: #f4f4f9;
             display: flex;
             justify-content: center;
@@ -36,7 +36,8 @@
             font-size: 22px;
         }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            position: relative;
         }
         label {
             display: block;
@@ -44,13 +45,41 @@
             font-weight: 600;
             color: #555;
         }
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+        }
         input[type="text"] {
-            width: 100%;
+            flex-grow: 1;
             padding: 12px;
-            box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 16px;
+        }
+        .btn-clear {
+            padding: 0 14px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+        }
+        .btn-clear:hover {
+            background: #d0d0d0;
+        }
+        .recents-group {
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fafafa;
+            font-size: 14px;
+            color: #444;
+            cursor: pointer;
         }
         .button-zone {
             display: flex;
@@ -67,7 +96,10 @@
             font-size: 15px;
             font-weight: bold;
             text-align: left;
-            transition: background 0.2s;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.98);
         }
         .btn-blue { background-color: #007BFF; }
         .btn-blue:hover { background-color: #0056b3; }
@@ -83,6 +115,18 @@
         .btn-purple:hover { background-color: #593196; }
         .btn-red { background-color: #dc3545; }
         .btn-red:hover { background-color: #bd2130; }
+        
+        .btn-open-all {
+            background-color: #343a40;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 5px;
+            border: 2px solid #212529;
+        }
+        .btn-open-all:hover {
+            background-color: #212529;
+        }
+
         .note {
             font-size: 12px;
             color: #777;
@@ -96,22 +140,35 @@
 <body>
 <div class="container">
     <h2>Bible Study Link Launcher</h2>
+    
     <div class="input-group">
         <label for="reference">Enter Bible Reference:</label>
-        <input type="text" id="reference" placeholder="e.g., 2 Kgs 3:4, 1 Cor 13, Rev 21:1">
+        <div class="input-wrapper">
+            <input type="text" id="reference" placeholder="e.g., 2 Kgs 3:4, 1 Cor 13, Rev 21:1" autofocus>
+            <button class="btn-clear" onclick="clearInput()" title="Clear Input">✕</button>
+        </div>
     </div>
+
+    <div class="recents-group">
+        <select id="recentsDropdown" onchange="selectRecent(this.value)">
+            <option value="" disabled selected>🕒 Recent Searches...</option>
+        </select>
+    </div>
+
     <div class="button-zone">
-        <button class="btn btn-blue" onclick="openSingleLink('sonic')">➤ Sonic Light (Dr. Constable)</button>
-        <button class="btn btn-teal" onclick="openSingleLink('bh-gen')">➤ Bible Hub (Generic Verse)</button>
-        <button class="btn btn-teal" onclick="openSingleLink('bh-com')">➤ Bible Hub (Commentary Index)</button>
-        <button class="btn btn-navy" onclick="openSingleLink('blb')">➤ Blue Letter Bible (KJV)</button>
-        <button class="btn btn-orange" onclick="openSingleLink('precept')">➤ Precept Austin</button>
-        <button class="btn btn-green" onclick="openSingleLink('free')">➤ Free Bible Commentary</button>
-        <button class="btn btn-purple" onclick="openSingleLink('reformation')">➤ Reformation Study Bible</button>
-        <button class="btn btn-red" onclick="openSingleLink('wiersbe')">➤ Wiersbe Be Bible Study</button>
+        <button class="btn btn-open-all" onclick="openAllLinks()">⚡ Open All Commentaries in Tabs</button>
+        <button class="btn btn-blue" onclick="triggerLaunch('sonic')">➤ Sonic Light (Dr. Constable)</button>
+        <button class="btn btn-teal" onclick="triggerLaunch('bh-gen')">➤ Bible Hub (Generic Verse)</button>
+        <button class="btn btn-teal" onclick="triggerLaunch('bh-com')">➤ Bible Hub (Commentary Index)</button>
+        <button class="btn btn-navy" onclick="triggerLaunch('blb')">➤ Blue Letter Bible (KJV)</button>
+        <button class="btn btn-orange" onclick="triggerLaunch('precept')">➤ Precept Austin</button>
+        <button class="btn btn-green" onclick="triggerLaunch('free')">➤ Free Bible Commentary</button>
+        <button class="btn btn-purple" onclick="triggerLaunch('reformation')">➤ Reformation Study Bible</button>
+        <button class="btn btn-red" onclick="triggerLaunch('wiersbe')">➤ Wiersbe Be Bible Study</button>
     </div>
+
     <p class="note">
-        Accepts any standard or abbreviated Old and New Testament format. Google searches are now automatically translated to full book names.
+        <strong>Tip:</strong> Press <em>Enter</em> while typing to trigger Sonic Light. "Open All" requires allowing pop-ups in your browser when prompted.
     </p>
 </div>
 
@@ -187,12 +244,9 @@ const bookMap = {
     "revelation": "revelation", "rev": "revelation", "re": "revelation", "the revelation": "revelation"
 };
 
-function openSingleLink(target) {
-    let rawRef = document.getElementById('reference').value.trim();
-    if (!rawRef) {
-        alert("Please enter a reference first.");
-        return;
-    }
+const targets = ['sonic', 'bh-gen', 'bh-com', 'blb', 'precept', 'free', 'reformation', 'wiersbe'];
+
+function buildUrl(target, rawRef) {
     let cleanInput = rawRef.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
     let match = cleanInput.match(/^([a-z0-9\s]+?)\s*(\d.*)$/i);
     let typedBook = "";
@@ -210,59 +264,123 @@ function openSingleLink(target) {
         standardBook = typedBook.replace(" ", "_");
     }
 
-    // --- HANDLE TARGET-SPECIFIC EXCEPTIONS ---
-    
-    // 1. Sonic Light naming syntax overrides
     let bookSonicLight = standardBook.replace("_", ""); 
     if (standardBook === "song_of_solomon") {
         bookSonicLight = "song";
     }
 
-    // 2. Bible Hub naming syntax overrides
     let bookBibleHub = standardBook;
     if (standardBook === "song_of_solomon") {
         bookBibleHub = "songs";
     }
     let bibleHubVerses = verses.replace(":", "-");        
-
-    // 3. Clean search queries for site searches (Google API / Blue Letter Bible)
     let cleanSearchQuery = `${standardBook.replace("_", " ")} ${verses}`;
-
-    let finalUrl = "";
 
     switch(target) {
         case 'sonic':
-            finalUrl = `https://soniclight.com/tcon/notes/html/${bookSonicLight}/${bookSonicLight}.htm`;
-            break;
+            return `https://soniclight.com/tcon/notes/html/${bookSonicLight}/${bookSonicLight}.htm`;
         case 'bh-gen':
-            finalUrl = `https://biblehub.com/${bookBibleHub}/${bibleHubVerses}.htm`;
-            break;
+            return `https://biblehub.com/${bookBibleHub}/${bibleHubVerses}.htm`;
         case 'bh-com':
-            finalUrl = `https://biblehub.com/commentaries/${bookBibleHub}/${bibleHubVerses}.htm`;
-            break;
+            return `https://biblehub.com/commentaries/${bookBibleHub}/${bibleHubVerses}.htm`;
         case 'blb':
-            finalUrl = `https://www.blueletterbible.org/search/preSearch.cfm?t=KJV&Criteria=${encodeURIComponent(cleanSearchQuery)}&x=0&y=0&csr=0&csrf=0&csrt=0&cscs=`;
-            break;
+            return `https://www.blueletterbible.org/search/preSearch.cfm?t=KJV&Criteria=${encodeURIComponent(cleanSearchQuery)}&x=0&y=0&csr=0&csrf=0&csrt=0&cscs=`;
         case 'precept':
-            finalUrl = `https://www.google.com/search?q=site:preceptaustin.org+${encodeURIComponent(cleanSearchQuery)}`;
-            break;
+            return `https://www.google.com/search?q=site:preceptaustin.org+${encodeURIComponent(cleanSearchQuery)}`;
         case 'free':
-            finalUrl = `https://www.google.com/search?q=site:freebiblecommentary.org+${encodeURIComponent(cleanSearchQuery)}`;
-            break;
+            return `https://www.google.com/search?q=site:freebiblecommentary.org+${encodeURIComponent(cleanSearchQuery)}`;
         case 'reformation':
-            finalUrl = `https://www.google.com/search?q=site:biblegateway.com/resources/reformation-study-bible/+${encodeURIComponent(cleanSearchQuery)}`;
-            break;
+            return `https://www.google.com/search?q=site:biblegateway.com/resources/reformation-study-bible/+${encodeURIComponent(cleanSearchQuery)}`;
         case 'wiersbe':
-            finalUrl = `https://www.google.com/search?q=site:biblegateway.com/resources/wiersbe-be-bible-study/+${encodeURIComponent(cleanSearchQuery)}`;
-            break;
+            return `https://www.google.com/search?q=site:biblegateway.com/resources/wiersbe-be-bible-study/+${encodeURIComponent(cleanSearchQuery)}`;
     }
+    return '';
+}
 
-    if (finalUrl) {
-        window.open(finalUrl, '_blank');
+function triggerLaunch(target) {
+    let rawRef = document.getElementById('reference').value.trim();
+    if (!rawRef) {
+        alert("Please enter a reference first.");
+        return;
+    }
+    saveRecentSearch(rawRef);
+    let url = buildUrl(target, rawRef);
+    if (url) {
+        window.open(url, '_blank');
     }
 }
 
-// Register the Service Worker for PWA compliance
+function openAllLinks() {
+    let rawRef = document.getElementById('reference').value.trim();
+    if (!rawRef) {
+        alert("Please enter a reference first.");
+        return;
+    }
+    saveRecentSearch(rawRef);
+    targets.forEach(target => {
+        let url = buildUrl(target, rawRef);
+        if (url) {
+            window.open(url, '_blank');
+        }
+    });
+}
+
+// --- LOCAL STORAGE & RECENTS DROPDOWN ---
+
+function saveRecentSearch(ref) {
+    let recents = JSON.parse(localStorage.getItem('bible_recents') || '[]');
+    // Avoid duplicate entries (case-insensitive)
+    recents = recents.filter(item => item.toLowerCase() !== ref.toLowerCase());
+    recents.unshift(ref); // Add to beginning
+    if (recents.length > 8) recents.pop(); // Keep top 8
+    localStorage.setItem('bible_recents', JSON.stringify(recents));
+    renderRecents();
+}
+
+function renderRecents() {
+    let recents = JSON.parse(localStorage.getItem('bible_recents') || '[]');
+    let dropdown = document.getElementById('recentsDropdown');
+    dropdown.innerHTML = '<option value="" disabled selected>🕒 Recent Searches...</option>';
+    
+    if (recents.length === 0) {
+        let opt = document.createElement('option');
+        opt.disabled = true;
+        opt.textContent = "No recent searches yet";
+        dropdown.appendChild(opt);
+        return;
+    }
+
+    recents.forEach(ref => {
+        let opt = document.createElement('option');
+        opt.value = ref;
+        opt.textContent = ref;
+        dropdown.appendChild(opt);
+    });
+}
+
+function selectRecent(value) {
+    if (value) {
+        document.getElementById('reference').value = value;
+        document.getElementById('reference').focus();
+    }
+}
+
+function clearInput() {
+    document.getElementById('reference').value = '';
+    document.getElementById('reference').focus();
+}
+
+// --- KEYBOARD LISTENER (Press 'Enter' to open default link) ---
+document.getElementById('reference').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        triggerLaunch('sonic'); // Launches Sonic Light on Enter
+    }
+});
+
+// Load recents on startup
+renderRecents();
+
+// Register Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
