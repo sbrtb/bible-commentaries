@@ -115,6 +115,8 @@
         .btn-purple:hover { background-color: #593196; }
         .btn-red { background-color: #dc3545; }
         .btn-red:hover { background-color: #bd2130; }
+        .btn-brown { background-color: #8b5a2b; }
+        .btn-brown:hover { background-color: #6e4620; }
         
         .btn-open-all {
             background-color: #343a40;
@@ -125,6 +127,13 @@
         }
         .btn-open-all:hover {
             background-color: #212529;
+        }
+
+        /* Hide "Open All" on Mobile and Tablet */
+        @media screen and (max-width: 1024px) {
+            .btn-open-all {
+                display: none !important;
+            }
         }
 
         .note {
@@ -144,7 +153,7 @@
     <div class="input-group">
         <label for="reference">Enter Bible Reference:</label>
         <div class="input-wrapper">
-            <input type="text" id="reference" placeholder="e.g., 2 Kgs 3:4, 1 Cor 13, Rev 21:1" autofocus>
+            <input type="text" id="reference" placeholder="e.g., Prov 3:5, 1 Cor 13, Rev 21:1" autofocus>
             <button class="btn-clear" onclick="clearInput()" title="Clear Input">✕</button>
         </div>
     </div>
@@ -158,6 +167,7 @@
     <div class="button-zone">
         <button class="btn btn-open-all" onclick="openAllLinks()">⚡ Open All Commentaries in Tabs</button>
         <button class="btn btn-blue" onclick="triggerLaunch('sonic')">➤ Sonic Light (Dr. Constable)</button>
+        <button class="btn btn-brown" onclick="triggerLaunch('letgodbetrue')">➤ Let God Be True (Proverbs)</button>
         <button class="btn btn-teal" onclick="triggerLaunch('bh-gen')">➤ Bible Hub (Generic Verse)</button>
         <button class="btn btn-teal" onclick="triggerLaunch('bh-com')">➤ Bible Hub (Commentary Index)</button>
         <button class="btn btn-navy" onclick="triggerLaunch('blb')">➤ Blue Letter Bible (KJV)</button>
@@ -244,7 +254,7 @@ const bookMap = {
     "revelation": "revelation", "rev": "revelation", "re": "revelation", "the revelation": "revelation"
 };
 
-const targets = ['sonic', 'bh-gen', 'bh-com', 'blb', 'precept', 'free', 'reformation', 'wiersbe'];
+const targets = ['sonic', 'letgodbetrue', 'bh-gen', 'bh-com', 'blb', 'precept', 'free', 'reformation', 'wiersbe'];
 
 function buildUrl(target, rawRef) {
     let cleanInput = rawRef.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
@@ -279,6 +289,11 @@ function buildUrl(target, rawRef) {
     switch(target) {
         case 'sonic':
             return `https://soniclight.com/tcon/notes/html/${bookSonicLight}/${bookSonicLight}.htm`;
+        case 'letgodbetrue':
+            if (standardBook !== "proverbs") {
+                return null; // Restricted to Proverbs only
+            }
+            return `https://www.google.com/search?q=site:letgodbetrue.com/proverbs/+${encodeURIComponent(cleanSearchQuery)}`;
         case 'bh-gen':
             return `https://biblehub.com/${bookBibleHub}/${bibleHubVerses}.htm`;
         case 'bh-com':
@@ -303,8 +318,14 @@ function triggerLaunch(target) {
         alert("Please enter a reference first.");
         return;
     }
-    saveRecentSearch(rawRef);
+
     let url = buildUrl(target, rawRef);
+    if (target === 'letgodbetrue' && !url) {
+        alert("Let God Be True commentary search is only available for Proverbs references.");
+        return;
+    }
+
+    saveRecentSearch(rawRef);
     if (url) {
         window.open(url, '_blank');
     }
