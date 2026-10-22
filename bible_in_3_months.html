@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whole Bible in 3 Months – 92-Day Parallel Plan</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            margin-bottom: 24px;
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        p.subtitle {
+            margin: 0 0 16px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .progress-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar-bg {
+            background-color: #e2e8f0;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 7px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .start-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .start-picker input[type="date"] {
+            font: inherit;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 8px;
+            background: var(--card-bg);
+        }
+
+        .btn-reset {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: #f1f5f9;
+            color: #ef4444;
+            border-color: #fca5a5;
+        }
+
+        .plan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: auto 100px 1fr 100px;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .day-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-card.completed {
+            background-color: var(--success-bg);
+            border-color: #a7f3d0;
+        }
+
+        .day-card.completed .passage-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-container input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+
+        .date-badge {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary);
+            background: #eff6ff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .day-card.completed .date-badge {
+            color: #059669;
+            background: #d1fae5;
+        }
+
+        .passages {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .passage-row {
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .tag {
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            text-transform: uppercase;
+        }
+
+        .tag-ot {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag-nt {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .word-count {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: right;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .day-card {
+                grid-template-columns: auto 1fr;
+                gap: 12px;
+            }
+            .date-badge {
+                grid-column: 2;
+                justify-self: start;
+            }
+            .passages {
+                grid-column: 1 / -1;
+            }
+            .word-count {
+                grid-column: 1 / -1;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Whole Bible in 3 Months – 92-Day Parallel Plan</h1>
+        <p class="subtitle">Old and New Testament every day • Difficulty-balanced • No book split into 1–2 chapter pieces (OT) • ~8,600 words/day</p>
+
+        <div class="progress-section">
+            <div class="progress-header">
+                <span>Overall Progress</span>
+                <span id="progress-text">0 / 92 Days (0%)</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <span id="words-read-text" style="font-size: 0.85rem; color: var(--text-muted);">0 / 789,634 total words read</span>
+            <label class="start-picker">Start date
+                <input type="date" id="start-date" onchange="setStart(this.value)">
+                <span id="end-text"></span>
+            </label>
+            <button class="btn-reset" onclick="resetProgress()">Reset Progress</button>
+        </div>
+    </header>
+
+    <div class="plan-list" id="plan-list"></div>
+</div>
+
+<script>
+    const planData = [{"Date": "23\/10\/2026", "OT Passage": "Genesis 1-14", "NT Passage": "Matthew 1-3", "OT Words": 8370, "NT Words": 1479, "Total Words": 9849}, {"Date": "24\/10\/2026", "OT Passage": "Genesis 15-24", "NT Passage": "Matthew 4-5", "OT Words": 7794, "NT Words": 1638, "Total Words": 9432}, {"Date": "25\/10\/2026", "OT Passage": "Genesis 25-32", "NT Passage": "Matthew 6-8", "OT Words": 7540, "NT Words": 2193, "Total Words": 9733}, {"Date": "26\/10\/2026", "OT Passage": "Genesis 33-41", "NT Passage": "Matthew 9-11", "OT Words": 7218, "NT Words": 2424, "Total Words": 9642}, {"Date": "27\/10\/2026", "OT Passage": "Genesis 42-50", "NT Passage": "Matthew 12-13", "OT Words": 7343, "NT Words": 2535, "Total Words": 9878}, {"Date": "28\/10\/2026", "OT Passage": "Exodus 1-10", "NT Passage": "Matthew 14-16", "OT Words": 7652, "NT Words": 2194, "Total Words": 9846}, {"Date": "29\/10\/2026", "OT Passage": "Exodus 11-20", "NT Passage": "Matthew 17-19", "OT Words": 7687, "NT Words": 2208, "Total Words": 9895}, {"Date": "30\/10\/2026", "OT Passage": "Exodus 21-28", "NT Passage": "Matthew 20-21", "OT Words": 6658, "NT Words": 1905, "Total Words": 8563}, {"Date": "31\/10\/2026", "OT Passage": "Exodus 29-35", "NT Passage": "Matthew 22-24", "OT Words": 6375, "NT Words": 2708, "Total Words": 9083}, {"Date": "01\/11\/2026", "OT Passage": "Exodus 36-40; Leviticus 1-3", "NT Passage": "Matthew 25-26", "OT Words": 5835, "NT Words": 2620, "Total Words": 8455}, {"Date": "02\/11\/2026", "OT Passage": "Leviticus 4-10", "NT Passage": "Matthew 27-28", "OT Words": 6069, "NT Words": 1780, "Total Words": 7849}, {"Date": "03\/11\/2026", "OT Passage": "Leviticus 11-15", "NT Passage": "Mark 1-3", "OT Words": 5866, "NT Words": 2317, "Total Words": 8183}, {"Date": "04\/11\/2026", "OT Passage": "Leviticus 16-22", "NT Passage": "Mark 4-5", "OT Words": 5578, "NT Words": 1875, "Total Words": 7453}, {"Date": "05\/11\/2026", "OT Passage": "Leviticus 23-27", "NT Passage": "Mark 6-8", "OT Words": 5507, "NT Words": 2971, "Total Words": 8478}, {"Date": "06\/11\/2026", "OT Passage": "Numbers 1-5", "NT Passage": "Mark 9-10", "OT Words": 5766, "NT Words": 2382, "Total Words": 8148}, {"Date": "07\/11\/2026", "OT Passage": "Numbers 6-12", "NT Passage": "Mark 11-12", "OT Words": 6421, "NT Words": 1836, "Total Words": 8257}, {"Date": "08\/11\/2026", "OT Passage": "Numbers 13-19", "NT Passage": "Mark 13-14", "OT Words": 6460, "NT Words": 2423, "Total Words": 8883}, {"Date": "09\/11\/2026", "OT Passage": "Numbers 20-28", "NT Passage": "Mark 15-16", "OT Words": 7606, "NT Words": 1362, "Total Words": 8968}, {"Date": "10\/11\/2026", "OT Passage": "Numbers 29-36", "NT Passage": "Luke 1-2", "OT Words": 6642, "NT Words": 2677, "Total Words": 9319}, {"Date": "11\/11\/2026", "OT Passage": "Deuteronomy 1-8", "NT Passage": "Luke 3-4", "OT Words": 7574, "NT Words": 2038, "Total Words": 9612}, {"Date": "12\/11\/2026", "OT Passage": "Deuteronomy 9-17", "NT Passage": "Luke 5-6", "OT Words": 7030, "NT Words": 2178, "Total Words": 9208}, {"Date": "13\/11\/2026", "OT Passage": "Deuteronomy 18-27", "NT Passage": "Luke 7-8", "OT Words": 6684, "NT Words": 2640, "Total Words": 9324}, {"Date": "14\/11\/2026", "OT Passage": "Deuteronomy 28-34", "NT Passage": "Luke 9-10", "OT Words": 7063, "NT Words": 2449, "Total Words": 9512}, {"Date": "15\/11\/2026", "OT Passage": "Joshua 1-9", "NT Passage": "Luke 11-12", "OT Words": 7014, "NT Words": 2738, "Total Words": 9752}, {"Date": "16\/11\/2026", "OT Passage": "Joshua 10-18", "NT Passage": "Luke 13-14", "OT Words": 6621, "NT Words": 1676, "Total Words": 8297}, {"Date": "17\/11\/2026", "OT Passage": "Joshua 19-24; Judges 1-3", "NT Passage": "Luke 15-16", "OT Words": 7713, "NT Words": 1477, "Total Words": 9190}, {"Date": "18\/11\/2026", "OT Passage": "Judges 4-12", "NT Passage": "Luke 17-18", "OT Words": 8524, "NT Words": 1677, "Total Words": 10201}, {"Date": "19\/11\/2026", "OT Passage": "Judges 13-21", "NT Passage": "Luke 19-20", "OT Words": 7946, "NT Words": 2001, "Total Words": 9947}, {"Date": "20\/11\/2026", "OT Passage": "Ruth 1-4; 1 Samuel 1-7", "NT Passage": "Luke 21-22", "OT Words": 7443, "NT Words": 2216, "Total Words": 9659}, {"Date": "21\/11\/2026", "OT Passage": "1 Samuel 8-16", "NT Passage": "Luke 23-24", "OT Words": 7631, "NT Words": 2172, "Total Words": 9803}, {"Date": "22\/11\/2026", "OT Passage": "1 Samuel 17-24", "NT Passage": "John 1-3", "OT Words": 7301, "NT Words": 2277, "Total Words": 9578}, {"Date": "23\/11\/2026", "OT Passage": "1 Samuel 25-31; 2 Samuel 1-3", "NT Passage": "John 4-5", "OT Words": 8012, "NT Words": 2095, "Total Words": 10107}, {"Date": "24\/11\/2026", "OT Passage": "2 Samuel 4-13", "NT Passage": "John 6-7", "OT Words": 7046, "NT Words": 2508, "Total Words": 9554}, {"Date": "25\/11\/2026", "OT Passage": "2 Samuel 14-21", "NT Passage": "John 8-9", "OT Words": 8103, "NT Words": 2183, "Total Words": 10286}, {"Date": "26\/11\/2026", "OT Passage": "2 Samuel 22-24; 1 Kings 1-5", "NT Passage": "John 10-11", "OT Words": 7776, "NT Words": 1977, "Total Words": 9753}, {"Date": "27\/11\/2026", "OT Passage": "1 Kings 6-11", "NT Passage": "John 12-14", "OT Words": 7557, "NT Words": 2617, "Total Words": 10174}, {"Date": "28\/11\/2026", "OT Passage": "1 Kings 12-19", "NT Passage": "John 15-17", "OT Words": 7958, "NT Words": 2038, "Total Words": 9996}, {"Date": "29\/11\/2026", "OT Passage": "1 Kings 20-22; 2 Kings 1-4", "NT Passage": "John 18-19", "OT Words": 7638, "NT Words": 1957, "Total Words": 9595}, {"Date": "30\/11\/2026", "OT Passage": "2 Kings 5-13", "NT Passage": "John 20-21", "OT Words": 8380, "NT Words": 1442, "Total Words": 9822}, {"Date": "01\/12\/2026", "OT Passage": "2 Kings 14-21", "NT Passage": "Acts 1-3", "OT Words": 7650, "NT Words": 2316, "Total Words": 9966}, {"Date": "02\/12\/2026", "OT Passage": "2 Kings 22-25; 1 Chronicles 1-5", "NT Passage": "Acts 4-5", "OT Words": 7150, "NT Words": 1891, "Total Words": 9041}, {"Date": "03\/12\/2026", "OT Passage": "1 Chronicles 6-12", "NT Passage": "Acts 6-7", "OT Words": 5918, "NT Words": 1785, "Total Words": 7703}, {"Date": "04\/12\/2026", "OT Passage": "1 Chronicles 13-23", "NT Passage": "Acts 8-9", "OT Words": 6604, "NT Words": 1929, "Total Words": 8533}, {"Date": "05\/12\/2026", "OT Passage": "1 Chronicles 24-29; 2 Chronicles 1-5", "NT Passage": "Acts 10-11", "OT Words": 7199, "NT Words": 1775, "Total Words": 8974}, {"Date": "06\/12\/2026", "OT Passage": "2 Chronicles 6-17", "NT Passage": "Acts 12-13", "OT Words": 7640, "NT Words": 1935, "Total Words": 9575}, {"Date": "07\/12\/2026", "OT Passage": "2 Chronicles 18-28", "NT Passage": "Acts 14-15", "OT Words": 8170, "NT Words": 1552, "Total Words": 9722}, {"Date": "08\/12\/2026", "OT Passage": "2 Chronicles 29-36", "NT Passage": "Acts 16-17", "OT Words": 7511, "NT Words": 1798, "Total Words": 9309}, {"Date": "09\/12\/2026", "OT Passage": "Ezra 1-10", "NT Passage": "Acts 18-19", "OT Words": 7440, "NT Words": 1639, "Total Words": 9079}, {"Date": "10\/12\/2026", "OT Passage": "Nehemiah 1-9", "NT Passage": "Acts 20-21", "OT Words": 7148, "NT Words": 1949, "Total Words": 9097}, {"Date": "11\/12\/2026", "OT Passage": "Nehemiah 10-13; Esther 1-7", "NT Passage": "Acts 22-23", "OT Words": 7236, "NT Words": 1694, "Total Words": 8930}, {"Date": "12\/12\/2026", "OT Passage": "Esther 8-10; Job 1-11", "NT Passage": "Acts 24-26", "OT Words": 6470, "NT Words": 2132, "Total Words": 8602}, {"Date": "13\/12\/2026", "OT Passage": "Job 12-26", "NT Passage": "Acts 27-28", "OT Words": 5807, "NT Words": 1851, "Total Words": 7658}, {"Date": "14\/12\/2026", "OT Passage": "Job 27-38", "NT Passage": "Romans 1-2", "OT Words": 5761, "NT Words": 1318, "Total Words": 7079}, {"Date": "15\/12\/2026", "OT Passage": "Job 39-42; Psalms 1-23", "NT Passage": "Romans 3-4", "OT Words": 7466, "NT Words": 1108, "Total Words": 8574}, {"Date": "16\/12\/2026", "OT Passage": "Psalms 24-45", "NT Passage": "Romans 5-7", "OT Words": 7039, "NT Words": 1569, "Total Words": 8608}, {"Date": "17\/12\/2026", "OT Passage": "Psalms 46-69", "NT Passage": "Romans 8-10", "OT Words": 6532, "NT Words": 2083, "Total Words": 8615}, {"Date": "18\/12\/2026", "OT Passage": "Psalms 70-89", "NT Passage": "Romans 11-13", "OT Words": 7036, "NT Words": 1576, "Total Words": 8612}, {"Date": "19\/12\/2026", "OT Passage": "Psalms 90-109", "NT Passage": "Romans 14-16", "OT Words": 6728, "NT Words": 1768, "Total Words": 8496}, {"Date": "20\/12\/2026", "OT Passage": "Psalms 110-136", "NT Passage": "1 Corinthians 1-4", "OT Words": 6537, "NT Words": 1990, "Total Words": 8527}, {"Date": "21\/12\/2026", "OT Passage": "Psalms 137-150; Proverbs 1-7", "NT Passage": "1 Corinthians 5-8", "OT Words": 6230, "NT Words": 2054, "Total Words": 8284}, {"Date": "22\/12\/2026", "OT Passage": "Proverbs 8-19", "NT Passage": "1 Corinthians 9-11", "OT Words": 5799, "NT Words": 2056, "Total Words": 7855}, {"Date": "23\/12\/2026", "OT Passage": "Proverbs 20-31", "NT Passage": "1 Corinthians 12-14", "OT Words": 6141, "NT Words": 1750, "Total Words": 7891}, {"Date": "24\/12\/2026", "OT Passage": "Ecclesiastes 1-12", "NT Passage": "1 Corinthians 15-16", "OT Words": 5580, "NT Words": 1612, "Total Words": 7192}, {"Date": "25\/12\/2026", "OT Passage": "Song of Songs 1-8; Isaiah 1-6", "NT Passage": "2 Corinthians 1-3", "OT Words": 6010, "NT Words": 1381, "Total Words": 7391}, {"Date": "26\/12\/2026", "OT Passage": "Isaiah 7-16", "NT Passage": "2 Corinthians 4-7", "OT Words": 5544, "NT Words": 1702, "Total Words": 7246}, {"Date": "27\/12\/2026", "OT Passage": "Isaiah 17-28", "NT Passage": "2 Corinthians 8-10", "OT Words": 5885, "NT Words": 1360, "Total Words": 7245}, {"Date": "28\/12\/2026", "OT Passage": "Isaiah 29-37", "NT Passage": "2 Corinthians 11-13", "OT Words": 5764, "NT Words": 1622, "Total Words": 7386}, {"Date": "29\/12\/2026", "OT Passage": "Isaiah 38-45", "NT Passage": "Galatians 1-4", "OT Words": 5507, "NT Words": 2284, "Total Words": 7791}, {"Date": "30\/12\/2026", "OT Passage": "Isaiah 46-56", "NT Passage": "Galatians 5-6; Ephesians 1-2", "OT Words": 5488, "NT Words": 1761, "Total Words": 7249}, {"Date": "31\/12\/2026", "OT Passage": "Isaiah 57-66", "NT Passage": "Ephesians 3-6", "OT Words": 5499, "NT Words": 2061, "Total Words": 7560}, {"Date": "01\/01\/2027", "OT Passage": "Jeremiah 1-7", "NT Passage": "Philippians 1-4", "OT Words": 5881, "NT Words": 2183, "Total Words": 8064}, {"Date": "02\/01\/2027", "OT Passage": "Jeremiah 8-15", "NT Passage": "Colossians 1-4", "OT Words": 5574, "NT Words": 1979, "Total Words": 7553}, {"Date": "03\/01\/2027", "OT Passage": "Jeremiah 16-24", "NT Passage": "1 Thessalonians 1-5", "OT Words": 6204, "NT Words": 1837, "Total Words": 8041}, {"Date": "04\/01\/2027", "OT Passage": "Jeremiah 25-31", "NT Passage": "2 Thessalonians 1-3; 1 Timothy 1-3", "OT Words": 6256, "NT Words": 2025, "Total Words": 8281}, {"Date": "05\/01\/2027", "OT Passage": "Jeremiah 32-38", "NT Passage": "1 Timothy 4-6; 2 Timothy 1-2", "OT Words": 6460, "NT Words": 2185, "Total Words": 8645}, {"Date": "06\/01\/2027", "OT Passage": "Jeremiah 39-48", "NT Passage": "2 Timothy 3-4; Titus 1-3", "OT Words": 6712, "NT Words": 1618, "Total Words": 8330}, {"Date": "07\/01\/2027", "OT Passage": "Jeremiah 49-52", "NT Passage": "Philemon 1; Hebrews 1-4", "OT Words": 5567, "NT Words": 2006, "Total Words": 7573}, {"Date": "08\/01\/2027", "OT Passage": "Lamentations 1-5; Ezekiel 1-4", "NT Passage": "Hebrews 5-7", "OT Words": 5882, "NT Words": 1353, "Total Words": 7235}, {"Date": "09\/01\/2027", "OT Passage": "Ezekiel 5-12", "NT Passage": "Hebrews 8-10", "OT Words": 5100, "NT Words": 1849, "Total Words": 6949}, {"Date": "10\/01\/2027", "OT Passage": "Ezekiel 13-18", "NT Passage": "Hebrews 11-13", "OT Words": 5201, "NT Words": 2119, "Total Words": 7320}, {"Date": "11\/01\/2027", "OT Passage": "Ezekiel 19-23", "NT Passage": "James 1-5", "OT Words": 5064, "NT Words": 2304, "Total Words": 7368}, {"Date": "12\/01\/2027", "OT Passage": "Ezekiel 24-30", "NT Passage": "1 Peter 1-5", "OT Words": 5199, "NT Words": 2475, "Total Words": 7674}, {"Date": "13\/01\/2027", "OT Passage": "Ezekiel 31-36", "NT Passage": "2 Peter 1-3", "OT Words": 5367, "NT Words": 1553, "Total Words": 6920}, {"Date": "14\/01\/2027", "OT Passage": "Ezekiel 37-42", "NT Passage": "1 John 1-3", "OT Words": 5474, "NT Words": 1516, "Total Words": 6990}, {"Date": "15\/01\/2027", "OT Passage": "Ezekiel 43-48", "NT Passage": "1 John 4-5; 2 John 1; 3 John 1", "OT Words": 5525, "NT Words": 1593, "Total Words": 7118}, {"Date": "16\/01\/2027", "OT Passage": "Daniel 1-7", "NT Passage": "Jude 1; Revelation 1-2", "OT Words": 7197, "NT Words": 2002, "Total Words": 9199}, {"Date": "17\/01\/2027", "OT Passage": "Daniel 8-12; Hosea 1-3", "NT Passage": "Revelation 3-5", "OT Words": 5595, "NT Words": 1441, "Total Words": 7036}, {"Date": "18\/01\/2027", "OT Passage": "Hosea 4-14; Joel 1-3", "NT Passage": "Revelation 6-8", "OT Words": 6018, "NT Words": 1428, "Total Words": 7446}, {"Date": "19\/01\/2027", "OT Passage": "Amos 1-9; Obadiah 1; Jonah 1-4", "NT Passage": "Revelation 9-12", "OT Words": 6205, "NT Words": 2022, "Total Words": 8227}, {"Date": "20\/01\/2027", "OT Passage": "Micah 1-7; Nahum 1-3; Habakkuk 1-3", "NT Passage": "Revelation 13-16", "OT Words": 5911, "NT Words": 2008, "Total Words": 7919}, {"Date": "21\/01\/2027", "OT Passage": "Zephaniah 1-3; Haggai 1-2; Zechariah 1-7", "NT Passage": "Revelation 17-19", "OT Words": 5486, "NT Words": 1903, "Total Words": 7389}, {"Date": "22\/01\/2027", "OT Passage": "Zechariah 8-14; Malachi 1-4", "NT Passage": "Revelation 20-22", "OT Words": 5484, "NT Words": 1799, "Total Words": 7283}];
+    const STORAGE_KEY = 'parallel_bible_plan_progress_92day_v2';
+    const START_KEY = 'parallel_bible_plan_start_date';
+    const DEFAULT_START = '2026-10-23';
+
+    function getStart() {
+        let s = null;
+        try { s = localStorage.getItem(START_KEY); } catch (e) {}
+        return /^\d{4}-\d{2}-\d{2}$/.test(s || '') ? s : DEFAULT_START;
+    }
+
+    function setStart(value) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return;
+        try { localStorage.setItem(START_KEY, value); } catch (e) {}
+        renderPlan();
+    }
+
+    function dateFor(index) {
+        const [y, m, d] = getStart().split('-').map(Number);
+        const dt = new Date(y, m - 1, d + index);
+        const pad = n => String(n).padStart(2, '0');
+        return `${pad(dt.getDate())}/${pad(dt.getMonth() + 1)}/${dt.getFullYear()}`;
+    }
+
+    // Load saved progress from localStorage
+    function getSavedProgress() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        } catch (e) { return {}; }
+    }
+
+    // Save progress to localStorage
+    function saveProgress(progress) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+    }
+
+    // Render the reading plan list
+    function renderPlan() {
+        const listContainer = document.getElementById('plan-list');
+        const progress = getSavedProgress();
+        listContainer.innerHTML = '';
+
+        let completedDays = 0;
+        let totalWordsRead = 0;
+        const totalWordsOverall = planData.reduce((acc, curr) => acc + curr['Total Words'], 0);
+
+        planData.forEach((day, index) => {
+            const isCompleted = !!progress[index];
+            if (isCompleted) {
+                completedDays++;
+                totalWordsRead += day['Total Words'];
+            }
+
+            const card = document.createElement('div');
+            card.className = `day-card ${isCompleted ? 'completed' : ''}`;
+
+            card.innerHTML = `
+                <div class="checkbox-container">
+                    <input type="checkbox" id="chk-${index}" ${isCompleted ? 'checked' : ''} onchange="toggleDay(${index})">
+                </div>
+                <div class="date-badge">${dateFor(index)}</div>
+                <div class="passages">
+                    <div class="passage-row passage-text"><span class="tag tag-ot">OT</span>${day['OT Passage']}</div>
+                    <div class="passage-row passage-text"><span class="tag tag-nt">NT</span>${day['NT Passage']}</div>
+                </div>
+                <div class="word-count">${day['Total Words'].toLocaleString()} words</div>
+            `;
+
+            listContainer.appendChild(card);
+        });
+
+        document.getElementById('start-date').value = getStart();
+        document.getElementById('end-text').innerText = `Ends ${dateFor(planData.length - 1)}`;
+
+        // Update Progress Bar
+        const percentage = Math.round((completedDays / planData.length) * 100);
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+        document.getElementById('progress-text').innerText = `${completedDays} / ${planData.length} Days (${percentage}%)`;
+        document.getElementById('words-read-text').innerText = `${totalWordsRead.toLocaleString()} / ${totalWordsOverall.toLocaleString()} total words read`;
+    }
+
+    // Toggle day completion status
+    function toggleDay(index) {
+        const progress = getSavedProgress();
+        progress[index] = !progress[index];
+        saveProgress(progress);
+        renderPlan();
+    }
+
+    // Reset all progress
+    function resetProgress() {
+        if (confirm("Are you sure you want to reset your reading progress?")) {
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            renderPlan();
+        }
+    }
+
+    // Initial render
+    renderPlan();
+</script>
+
+</body>
+</html>
