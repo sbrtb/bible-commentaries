@@ -245,140 +245,190 @@
                 text-align: left;
             }
         }
-    </style>
+    
+        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
+        .controls{flex-wrap:wrap;gap:10px}
+        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
+        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
+        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
+        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
+        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
+        label.book input{accent-color:var(--success)}
+        @media (max-width:640px){#books{grid-template-columns:1fr}}
+
+        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
+        .controls{flex-wrap:wrap;gap:10px}
+        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
+        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
+        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
+        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
+        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
+        label.book input{accent-color:var(--success)}
+        @media (max-width:640px){#books{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-
 <div class="container">
     <header>
         <h1>Whole Bible in 3 Months – 92-Day Parallel Plan</h1>
-        <p class="subtitle">Old and New Testament every day • Difficulty-balanced • No book split into 1–2 chapter pieces (OT) • ~8,600 words/day</p>
-
+        <p class="subtitle">OT + NT every day • Difficulty-balanced • Check a book as read and the plan shortens to keep the same daily pace</p>
         <div class="progress-section">
-            <div class="progress-header">
-                <span>Overall Progress</span>
-                <span id="progress-text">0 / 92 Days (0%)</span>
-            </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-bar"></div>
-            </div>
+            <div class="progress-header"><span>Overall Progress</span><span id="progress-text"></span></div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
         </div>
-
         <div class="controls">
-            <span id="words-read-text" style="font-size: 0.85rem; color: var(--text-muted);">0 / 789,634 total words read</span>
-            <label class="start-picker">Start date
-                <input type="date" id="start-date" onchange="setStart(this.value)">
-                <span id="end-text"></span>
-            </label>
+            <span id="words-read-text" style="font-size: 0.85rem; color: var(--text-muted);"></span>
+            <label class="start-picker">Start date <input type="date" id="start-date" onchange="setStart(this.value)"> <span id="end-text"></span></label>
+            <label class="start-picker">Words/day <input type="number" id="target" step="500" min="2000" max="40000" onchange="setTarget(this.value)"></label>
             <button class="btn-reset" onclick="resetProgress()">Reset Progress</button>
         </div>
+        <details class="books-panel"><summary>Books already read <span id="books-count"></span></summary><div id="books"></div></details>
     </header>
-
     <div class="plan-list" id="plan-list"></div>
 </div>
-
 <script>
-    const planData = [{"Date": "23\/10\/2026", "OT Passage": "Genesis 1-14", "NT Passage": "Matthew 1-3", "OT Words": 8370, "NT Words": 1479, "Total Words": 9849}, {"Date": "24\/10\/2026", "OT Passage": "Genesis 15-24", "NT Passage": "Matthew 4-5", "OT Words": 7794, "NT Words": 1638, "Total Words": 9432}, {"Date": "25\/10\/2026", "OT Passage": "Genesis 25-32", "NT Passage": "Matthew 6-8", "OT Words": 7540, "NT Words": 2193, "Total Words": 9733}, {"Date": "26\/10\/2026", "OT Passage": "Genesis 33-41", "NT Passage": "Matthew 9-11", "OT Words": 7218, "NT Words": 2424, "Total Words": 9642}, {"Date": "27\/10\/2026", "OT Passage": "Genesis 42-50", "NT Passage": "Matthew 12-13", "OT Words": 7343, "NT Words": 2535, "Total Words": 9878}, {"Date": "28\/10\/2026", "OT Passage": "Exodus 1-10", "NT Passage": "Matthew 14-16", "OT Words": 7652, "NT Words": 2194, "Total Words": 9846}, {"Date": "29\/10\/2026", "OT Passage": "Exodus 11-20", "NT Passage": "Matthew 17-19", "OT Words": 7687, "NT Words": 2208, "Total Words": 9895}, {"Date": "30\/10\/2026", "OT Passage": "Exodus 21-28", "NT Passage": "Matthew 20-21", "OT Words": 6658, "NT Words": 1905, "Total Words": 8563}, {"Date": "31\/10\/2026", "OT Passage": "Exodus 29-35", "NT Passage": "Matthew 22-24", "OT Words": 6375, "NT Words": 2708, "Total Words": 9083}, {"Date": "01\/11\/2026", "OT Passage": "Exodus 36-40; Leviticus 1-3", "NT Passage": "Matthew 25-26", "OT Words": 5835, "NT Words": 2620, "Total Words": 8455}, {"Date": "02\/11\/2026", "OT Passage": "Leviticus 4-10", "NT Passage": "Matthew 27-28", "OT Words": 6069, "NT Words": 1780, "Total Words": 7849}, {"Date": "03\/11\/2026", "OT Passage": "Leviticus 11-15", "NT Passage": "Mark 1-3", "OT Words": 5866, "NT Words": 2317, "Total Words": 8183}, {"Date": "04\/11\/2026", "OT Passage": "Leviticus 16-22", "NT Passage": "Mark 4-5", "OT Words": 5578, "NT Words": 1875, "Total Words": 7453}, {"Date": "05\/11\/2026", "OT Passage": "Leviticus 23-27", "NT Passage": "Mark 6-8", "OT Words": 5507, "NT Words": 2971, "Total Words": 8478}, {"Date": "06\/11\/2026", "OT Passage": "Numbers 1-5", "NT Passage": "Mark 9-10", "OT Words": 5766, "NT Words": 2382, "Total Words": 8148}, {"Date": "07\/11\/2026", "OT Passage": "Numbers 6-12", "NT Passage": "Mark 11-12", "OT Words": 6421, "NT Words": 1836, "Total Words": 8257}, {"Date": "08\/11\/2026", "OT Passage": "Numbers 13-19", "NT Passage": "Mark 13-14", "OT Words": 6460, "NT Words": 2423, "Total Words": 8883}, {"Date": "09\/11\/2026", "OT Passage": "Numbers 20-28", "NT Passage": "Mark 15-16", "OT Words": 7606, "NT Words": 1362, "Total Words": 8968}, {"Date": "10\/11\/2026", "OT Passage": "Numbers 29-36", "NT Passage": "Luke 1-2", "OT Words": 6642, "NT Words": 2677, "Total Words": 9319}, {"Date": "11\/11\/2026", "OT Passage": "Deuteronomy 1-8", "NT Passage": "Luke 3-4", "OT Words": 7574, "NT Words": 2038, "Total Words": 9612}, {"Date": "12\/11\/2026", "OT Passage": "Deuteronomy 9-17", "NT Passage": "Luke 5-6", "OT Words": 7030, "NT Words": 2178, "Total Words": 9208}, {"Date": "13\/11\/2026", "OT Passage": "Deuteronomy 18-27", "NT Passage": "Luke 7-8", "OT Words": 6684, "NT Words": 2640, "Total Words": 9324}, {"Date": "14\/11\/2026", "OT Passage": "Deuteronomy 28-34", "NT Passage": "Luke 9-10", "OT Words": 7063, "NT Words": 2449, "Total Words": 9512}, {"Date": "15\/11\/2026", "OT Passage": "Joshua 1-9", "NT Passage": "Luke 11-12", "OT Words": 7014, "NT Words": 2738, "Total Words": 9752}, {"Date": "16\/11\/2026", "OT Passage": "Joshua 10-18", "NT Passage": "Luke 13-14", "OT Words": 6621, "NT Words": 1676, "Total Words": 8297}, {"Date": "17\/11\/2026", "OT Passage": "Joshua 19-24; Judges 1-3", "NT Passage": "Luke 15-16", "OT Words": 7713, "NT Words": 1477, "Total Words": 9190}, {"Date": "18\/11\/2026", "OT Passage": "Judges 4-12", "NT Passage": "Luke 17-18", "OT Words": 8524, "NT Words": 1677, "Total Words": 10201}, {"Date": "19\/11\/2026", "OT Passage": "Judges 13-21", "NT Passage": "Luke 19-20", "OT Words": 7946, "NT Words": 2001, "Total Words": 9947}, {"Date": "20\/11\/2026", "OT Passage": "Ruth 1-4; 1 Samuel 1-7", "NT Passage": "Luke 21-22", "OT Words": 7443, "NT Words": 2216, "Total Words": 9659}, {"Date": "21\/11\/2026", "OT Passage": "1 Samuel 8-16", "NT Passage": "Luke 23-24", "OT Words": 7631, "NT Words": 2172, "Total Words": 9803}, {"Date": "22\/11\/2026", "OT Passage": "1 Samuel 17-24", "NT Passage": "John 1-3", "OT Words": 7301, "NT Words": 2277, "Total Words": 9578}, {"Date": "23\/11\/2026", "OT Passage": "1 Samuel 25-31; 2 Samuel 1-3", "NT Passage": "John 4-5", "OT Words": 8012, "NT Words": 2095, "Total Words": 10107}, {"Date": "24\/11\/2026", "OT Passage": "2 Samuel 4-13", "NT Passage": "John 6-7", "OT Words": 7046, "NT Words": 2508, "Total Words": 9554}, {"Date": "25\/11\/2026", "OT Passage": "2 Samuel 14-21", "NT Passage": "John 8-9", "OT Words": 8103, "NT Words": 2183, "Total Words": 10286}, {"Date": "26\/11\/2026", "OT Passage": "2 Samuel 22-24; 1 Kings 1-5", "NT Passage": "John 10-11", "OT Words": 7776, "NT Words": 1977, "Total Words": 9753}, {"Date": "27\/11\/2026", "OT Passage": "1 Kings 6-11", "NT Passage": "John 12-14", "OT Words": 7557, "NT Words": 2617, "Total Words": 10174}, {"Date": "28\/11\/2026", "OT Passage": "1 Kings 12-19", "NT Passage": "John 15-17", "OT Words": 7958, "NT Words": 2038, "Total Words": 9996}, {"Date": "29\/11\/2026", "OT Passage": "1 Kings 20-22; 2 Kings 1-4", "NT Passage": "John 18-19", "OT Words": 7638, "NT Words": 1957, "Total Words": 9595}, {"Date": "30\/11\/2026", "OT Passage": "2 Kings 5-13", "NT Passage": "John 20-21", "OT Words": 8380, "NT Words": 1442, "Total Words": 9822}, {"Date": "01\/12\/2026", "OT Passage": "2 Kings 14-21", "NT Passage": "Acts 1-3", "OT Words": 7650, "NT Words": 2316, "Total Words": 9966}, {"Date": "02\/12\/2026", "OT Passage": "2 Kings 22-25; 1 Chronicles 1-5", "NT Passage": "Acts 4-5", "OT Words": 7150, "NT Words": 1891, "Total Words": 9041}, {"Date": "03\/12\/2026", "OT Passage": "1 Chronicles 6-12", "NT Passage": "Acts 6-7", "OT Words": 5918, "NT Words": 1785, "Total Words": 7703}, {"Date": "04\/12\/2026", "OT Passage": "1 Chronicles 13-23", "NT Passage": "Acts 8-9", "OT Words": 6604, "NT Words": 1929, "Total Words": 8533}, {"Date": "05\/12\/2026", "OT Passage": "1 Chronicles 24-29; 2 Chronicles 1-5", "NT Passage": "Acts 10-11", "OT Words": 7199, "NT Words": 1775, "Total Words": 8974}, {"Date": "06\/12\/2026", "OT Passage": "2 Chronicles 6-17", "NT Passage": "Acts 12-13", "OT Words": 7640, "NT Words": 1935, "Total Words": 9575}, {"Date": "07\/12\/2026", "OT Passage": "2 Chronicles 18-28", "NT Passage": "Acts 14-15", "OT Words": 8170, "NT Words": 1552, "Total Words": 9722}, {"Date": "08\/12\/2026", "OT Passage": "2 Chronicles 29-36", "NT Passage": "Acts 16-17", "OT Words": 7511, "NT Words": 1798, "Total Words": 9309}, {"Date": "09\/12\/2026", "OT Passage": "Ezra 1-10", "NT Passage": "Acts 18-19", "OT Words": 7440, "NT Words": 1639, "Total Words": 9079}, {"Date": "10\/12\/2026", "OT Passage": "Nehemiah 1-9", "NT Passage": "Acts 20-21", "OT Words": 7148, "NT Words": 1949, "Total Words": 9097}, {"Date": "11\/12\/2026", "OT Passage": "Nehemiah 10-13; Esther 1-7", "NT Passage": "Acts 22-23", "OT Words": 7236, "NT Words": 1694, "Total Words": 8930}, {"Date": "12\/12\/2026", "OT Passage": "Esther 8-10; Job 1-11", "NT Passage": "Acts 24-26", "OT Words": 6470, "NT Words": 2132, "Total Words": 8602}, {"Date": "13\/12\/2026", "OT Passage": "Job 12-26", "NT Passage": "Acts 27-28", "OT Words": 5807, "NT Words": 1851, "Total Words": 7658}, {"Date": "14\/12\/2026", "OT Passage": "Job 27-38", "NT Passage": "Romans 1-2", "OT Words": 5761, "NT Words": 1318, "Total Words": 7079}, {"Date": "15\/12\/2026", "OT Passage": "Job 39-42; Psalms 1-23", "NT Passage": "Romans 3-4", "OT Words": 7466, "NT Words": 1108, "Total Words": 8574}, {"Date": "16\/12\/2026", "OT Passage": "Psalms 24-45", "NT Passage": "Romans 5-7", "OT Words": 7039, "NT Words": 1569, "Total Words": 8608}, {"Date": "17\/12\/2026", "OT Passage": "Psalms 46-69", "NT Passage": "Romans 8-10", "OT Words": 6532, "NT Words": 2083, "Total Words": 8615}, {"Date": "18\/12\/2026", "OT Passage": "Psalms 70-89", "NT Passage": "Romans 11-13", "OT Words": 7036, "NT Words": 1576, "Total Words": 8612}, {"Date": "19\/12\/2026", "OT Passage": "Psalms 90-109", "NT Passage": "Romans 14-16", "OT Words": 6728, "NT Words": 1768, "Total Words": 8496}, {"Date": "20\/12\/2026", "OT Passage": "Psalms 110-136", "NT Passage": "1 Corinthians 1-4", "OT Words": 6537, "NT Words": 1990, "Total Words": 8527}, {"Date": "21\/12\/2026", "OT Passage": "Psalms 137-150; Proverbs 1-7", "NT Passage": "1 Corinthians 5-8", "OT Words": 6230, "NT Words": 2054, "Total Words": 8284}, {"Date": "22\/12\/2026", "OT Passage": "Proverbs 8-19", "NT Passage": "1 Corinthians 9-11", "OT Words": 5799, "NT Words": 2056, "Total Words": 7855}, {"Date": "23\/12\/2026", "OT Passage": "Proverbs 20-31", "NT Passage": "1 Corinthians 12-14", "OT Words": 6141, "NT Words": 1750, "Total Words": 7891}, {"Date": "24\/12\/2026", "OT Passage": "Ecclesiastes 1-12", "NT Passage": "1 Corinthians 15-16", "OT Words": 5580, "NT Words": 1612, "Total Words": 7192}, {"Date": "25\/12\/2026", "OT Passage": "Song of Songs 1-8; Isaiah 1-6", "NT Passage": "2 Corinthians 1-3", "OT Words": 6010, "NT Words": 1381, "Total Words": 7391}, {"Date": "26\/12\/2026", "OT Passage": "Isaiah 7-16", "NT Passage": "2 Corinthians 4-7", "OT Words": 5544, "NT Words": 1702, "Total Words": 7246}, {"Date": "27\/12\/2026", "OT Passage": "Isaiah 17-28", "NT Passage": "2 Corinthians 8-10", "OT Words": 5885, "NT Words": 1360, "Total Words": 7245}, {"Date": "28\/12\/2026", "OT Passage": "Isaiah 29-37", "NT Passage": "2 Corinthians 11-13", "OT Words": 5764, "NT Words": 1622, "Total Words": 7386}, {"Date": "29\/12\/2026", "OT Passage": "Isaiah 38-45", "NT Passage": "Galatians 1-4", "OT Words": 5507, "NT Words": 2284, "Total Words": 7791}, {"Date": "30\/12\/2026", "OT Passage": "Isaiah 46-56", "NT Passage": "Galatians 5-6; Ephesians 1-2", "OT Words": 5488, "NT Words": 1761, "Total Words": 7249}, {"Date": "31\/12\/2026", "OT Passage": "Isaiah 57-66", "NT Passage": "Ephesians 3-6", "OT Words": 5499, "NT Words": 2061, "Total Words": 7560}, {"Date": "01\/01\/2027", "OT Passage": "Jeremiah 1-7", "NT Passage": "Philippians 1-4", "OT Words": 5881, "NT Words": 2183, "Total Words": 8064}, {"Date": "02\/01\/2027", "OT Passage": "Jeremiah 8-15", "NT Passage": "Colossians 1-4", "OT Words": 5574, "NT Words": 1979, "Total Words": 7553}, {"Date": "03\/01\/2027", "OT Passage": "Jeremiah 16-24", "NT Passage": "1 Thessalonians 1-5", "OT Words": 6204, "NT Words": 1837, "Total Words": 8041}, {"Date": "04\/01\/2027", "OT Passage": "Jeremiah 25-31", "NT Passage": "2 Thessalonians 1-3; 1 Timothy 1-3", "OT Words": 6256, "NT Words": 2025, "Total Words": 8281}, {"Date": "05\/01\/2027", "OT Passage": "Jeremiah 32-38", "NT Passage": "1 Timothy 4-6; 2 Timothy 1-2", "OT Words": 6460, "NT Words": 2185, "Total Words": 8645}, {"Date": "06\/01\/2027", "OT Passage": "Jeremiah 39-48", "NT Passage": "2 Timothy 3-4; Titus 1-3", "OT Words": 6712, "NT Words": 1618, "Total Words": 8330}, {"Date": "07\/01\/2027", "OT Passage": "Jeremiah 49-52", "NT Passage": "Philemon 1; Hebrews 1-4", "OT Words": 5567, "NT Words": 2006, "Total Words": 7573}, {"Date": "08\/01\/2027", "OT Passage": "Lamentations 1-5; Ezekiel 1-4", "NT Passage": "Hebrews 5-7", "OT Words": 5882, "NT Words": 1353, "Total Words": 7235}, {"Date": "09\/01\/2027", "OT Passage": "Ezekiel 5-12", "NT Passage": "Hebrews 8-10", "OT Words": 5100, "NT Words": 1849, "Total Words": 6949}, {"Date": "10\/01\/2027", "OT Passage": "Ezekiel 13-18", "NT Passage": "Hebrews 11-13", "OT Words": 5201, "NT Words": 2119, "Total Words": 7320}, {"Date": "11\/01\/2027", "OT Passage": "Ezekiel 19-23", "NT Passage": "James 1-5", "OT Words": 5064, "NT Words": 2304, "Total Words": 7368}, {"Date": "12\/01\/2027", "OT Passage": "Ezekiel 24-30", "NT Passage": "1 Peter 1-5", "OT Words": 5199, "NT Words": 2475, "Total Words": 7674}, {"Date": "13\/01\/2027", "OT Passage": "Ezekiel 31-36", "NT Passage": "2 Peter 1-3", "OT Words": 5367, "NT Words": 1553, "Total Words": 6920}, {"Date": "14\/01\/2027", "OT Passage": "Ezekiel 37-42", "NT Passage": "1 John 1-3", "OT Words": 5474, "NT Words": 1516, "Total Words": 6990}, {"Date": "15\/01\/2027", "OT Passage": "Ezekiel 43-48", "NT Passage": "1 John 4-5; 2 John 1; 3 John 1", "OT Words": 5525, "NT Words": 1593, "Total Words": 7118}, {"Date": "16\/01\/2027", "OT Passage": "Daniel 1-7", "NT Passage": "Jude 1; Revelation 1-2", "OT Words": 7197, "NT Words": 2002, "Total Words": 9199}, {"Date": "17\/01\/2027", "OT Passage": "Daniel 8-12; Hosea 1-3", "NT Passage": "Revelation 3-5", "OT Words": 5595, "NT Words": 1441, "Total Words": 7036}, {"Date": "18\/01\/2027", "OT Passage": "Hosea 4-14; Joel 1-3", "NT Passage": "Revelation 6-8", "OT Words": 6018, "NT Words": 1428, "Total Words": 7446}, {"Date": "19\/01\/2027", "OT Passage": "Amos 1-9; Obadiah 1; Jonah 1-4", "NT Passage": "Revelation 9-12", "OT Words": 6205, "NT Words": 2022, "Total Words": 8227}, {"Date": "20\/01\/2027", "OT Passage": "Micah 1-7; Nahum 1-3; Habakkuk 1-3", "NT Passage": "Revelation 13-16", "OT Words": 5911, "NT Words": 2008, "Total Words": 7919}, {"Date": "21\/01\/2027", "OT Passage": "Zephaniah 1-3; Haggai 1-2; Zechariah 1-7", "NT Passage": "Revelation 17-19", "OT Words": 5486, "NT Words": 1903, "Total Words": 7389}, {"Date": "22\/01\/2027", "OT Passage": "Zechariah 8-14; Malachi 1-4", "NT Passage": "Revelation 20-22", "OT Words": 5484, "NT Words": 1799, "Total Words": 7283}];
-    const STORAGE_KEY = 'parallel_bible_plan_progress_92day_v2';
-    const START_KEY = 'parallel_bible_plan_start_date';
-    const DEFAULT_START = '2026-10-23';
+const DATA = {"books":[{"n":"Genesis","t":"OT","f":1,"tot":50,"w":[797,632,695,632,505,579,584,586,658,496,606,536,457,607,471,412,679,867,1108,498,775,629,539,1816,706,889,1262,621,829,1022,1417,794,508,790,664,845,942,819,666,580,1404,977,938,874,731,766,965,639,766,687],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Exodus","t":"OT","f":1,"tot":40,"w":[457,657,791,891,594,753,692,936,982,899,325,1493,675,931,713,1062,465,760,702,561,893,790,827,492,926,937,558,1235,1341,970,438,1092,710,1004,820,892,738,831,1030,821],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.0,1.0,1.0,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Leviticus","t":"OT","f":1,"tot":27,"w":[525,487,511,1157,723,892,1057,988,624,628,1115,262,1857,1713,919,1157,553,667,898,836,587,880,1222,551,1532,1246,956],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Numbers","t":"OT","f":1,"tot":36,"w":[1333,828,1291,1416,898,742,1939,687,722,891,1056,384,742,1180,1068,1341,335,1111,683,791,931,1201,743,660,445,1446,610,779,954,503,1208,1009,928,630,965,445],"d":[1.6,1.6,1.6,1.6,1.4,1.4,1.6,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.6,1.4,1.4,1.4,1.4,1.4,1.4,1.6,1.6,1.4,1.4]},{"n":"Deuteronomy","t":"OT","f":1,"tot":34,"w":[1262,1021,815,1503,921,643,843,566,963,604,950,1055,627,707,707,710,707,611,608,646,731,894,685,681,562,667,599,2075,851,665,1041,1306,805,320],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Joshua","t":"OT","f":1,"tot":24,"w":[573,768,566,706,550,904,926,1221,800,1393,717,486,825,485,1032,253,660,770,944,308,1026,1321,574,1044],"d":[1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.1,1.1,1.1]},{"n":"Judges","t":"OT","f":1,"tot":21,"w":[962,692,842,761,755,1295,952,987,1667,473,1235,399,765,706,648,1110,385,1035,1102,1455,740],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Ruth","t":"OT","f":1,"tot":4,"w":[649,763,541,621],"d":[1.0,1.0,1.0,1.0]},{"n":"1 Samuel","t":"OT","f":1,"tot":31,"w":[782,1104,549,733,439,752,510,541,990,862,503,771,697,1606,981,680,1719,845,696,1289,499,761,831,661,1452,849,385,835,421,956,348],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"2 Samuel","t":"OT","f":1,"tot":24,"w":[712,911,1143,434,624,713,858,447,408,608,814,992,1148,1117,1118,738,935,1096,1473,848,778,951,878,855],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"1 Kings","t":"OT","f":1,"tot":22,"w":[1499,1510,850,706,527,1018,1482,2139,826,839,1253,1038,1138,987,951,1035,680,1397,732,1480,908,1517],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"2 Kings","t":"OT","f":1,"tot":25,"w":[669,848,848,1368,975,1019,824,953,1205,1203,738,688,775,881,1092,656,1245,1221,1148,660,747,712,1477,584,985],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"1 Chronicles","t":"OT","f":1,"tot":29,"w":[683,846,347,852,664,1341,831,491,960,364,944,987,386,357,714,850,779,399,630,289,914,605,681,541,543,710,805,864,988],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.2,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.2,1.2]},{"n":"2 Chronicles","t":"OT","f":1,"tot":36,"w":[530,645,481,595,497,1402,748,536,882,559,486,481,642,448,518,479,459,1051,352,1148,623,444,788,933,970,721,244,896,1157,869,757,1084,780,1223,900,741],"d":[1.3,1.3,1.3,1.3,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1]},{"n":"Ezra","t":"OT","f":1,"tot":10,"w":[371,998,547,769,583,778,863,990,617,924],"d":[1.2,1.5,1.2,1.2,1.2,1.2,1.2,1.5,1.2,1.5]},{"n":"Nehemiah","t":"OT","f":1,"tot":13,"w":[390,718,896,716,636,602,1176,686,1328,652,788,930,962],"d":[1.2,1.2,1.6,1.2,1.2,1.2,1.6,1.2,1.2,1.6,1.6,1.6,1.2]},{"n":"Esther","t":"OT","f":1,"tot":10,"w":[716,806,552,517,494,476,343,649,984,93],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Job","t":"OT","f":1,"tot":42,"w":[641,387,434,336,447,482,394,340,544,402,337,399,413,410,549,375,262,342,475,521,522,482,280,481,90,206,373,455,404,514,691,375,524,615,254,495,402,659,477,361,507,441],"d":[1.0,1.0,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.0]},{"n":"Psalms","t":"OT","f":1,"tot":150,"w":[130,206,139,165,245,159,327,166,367,350,128,147,107,149,99,206,311,918,272,144,246,581,118,178,342,183,340,201,179,231,498,241,350,347,564,223,702,361,270,400,240,281,130,451,327,204,143,229,337,400,322,165,152,110,435,225,230,218,339,211,133,228,194,184,267,327,111,698,670,102,471,369,423,413,189,193,330,1225,277,334,288,116,273,226,207,312,113,296,879,320,288,258,92,356,199,226,189,170,157,86,173,455,342,598,632,762,685,206,534,142,177,172,142,106,274,287,33,465,2423,88,110,124,94,121,108,94,110,101,119,116,60,276,69,44,329,353,165,172,410,239,203,151,252,302,331,178,299,202,143,85],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Proverbs","t":"OT","f":1,"tot":31,"w":[519,309,541,418,354,546,411,562,288,527,524,476,400,572,544,543,476,381,506,498,501,495,566,580,522,459,460,528,425,640,467],"d":[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Ecclesiastes","t":"OT","f":1,"tot":12,"w":[380,734,517,380,533,301,618,515,555,402,273,372],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Song of Songs","t":"OT","f":1,"tot":8,"w":[326,351,287,363,397,282,292,360],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Isaiah","t":"OT","f":1,"tot":66,"w":[758,568,587,210,863,366,693,558,599,928,519,134,576,856,266,415,428,255,730,169,417,675,469,592,381,550,405,814,742,1059,322,436,585,522,277,690,1131,592,268,796,804,676,711,886,774,342,471,627,867,365,771,405,387,493,399,361,569,522,591,665,380,362,538,308,753,811],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Jeremiah","t":"OT","f":1,"tot":52,"w":[528,1019,802,861,874,827,970,706,772,674,749,544,739,688,702,699,829,659,541,594,498,837,1186,361,1138,800,762,540,1005,717,1294,1432,842,824,657,1110,611,984,545,681,664,774,460,1228,152,821,215,1172,1180,1460,1853,1074],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.2,1.2,1.2,1.2,1.6,1.6,1.6,1.6,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.8,1.8,1.8,1.8,1.8,1.8,1.0]},{"n":"Lamentations","t":"OT","f":1,"tot":5,"w":[758,883,876,598,296],"d":[1.5,1.5,1.5,1.5,1.5]},{"n":"Ezekiel","t":"OT","f":1,"tot":48,"w":[870,273,809,519,628,470,768,655,400,659,721,799,738,746,205,1820,773,919,356,1601,945,840,1322,774,508,727,907,809,714,760,679,1077,1071,958,402,1180,870,776,928,1530,802,568,907,1031,882,880,780,1045],"d":[2.0,2.0,2.0,1.8,1.8,1.8,1.8,2.0,2.0,2.0,2.0,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Daniel","t":"OT","f":1,"tot":12,"w":[589,1500,992,1290,995,905,926,852,966,647,1530,411],"d":[1.1,1.1,1.1,1.1,1.1,1.1,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Hosea","t":"OT","f":1,"tot":14,"w":[355,678,156,465,368,254,398,330,468,425,308,311,426,232],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Joel","t":"OT","f":1,"tot":3,"w":[508,957,568],"d":[1.7,1.7,1.7]},{"n":"Amos","t":"OT","f":1,"tot":9,"w":[455,441,397,432,658,399,471,414,549],"d":[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Obadiah","t":"OT","f":1,"tot":1,"w":[669],"d":[1.6]},{"n":"Jonah","t":"OT","f":1,"tot":4,"w":[514,214,260,332],"d":[1.0,1.0,1.0,1.0]},{"n":"Micah","t":"OT","f":1,"tot":7,"w":[452,400,354,476,447,440,583],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Nahum","t":"OT","f":1,"tot":3,"w":[394,371,519],"d":[1.7,1.7,1.7]},{"n":"Habakkuk","t":"OT","f":1,"tot":3,"w":[423,563,489],"d":[1.6,1.6,1.6]},{"n":"Zephaniah","t":"OT","f":1,"tot":3,"w":[555,463,598],"d":[1.6,1.6,1.6]},{"n":"Haggai","t":"OT","f":1,"tot":2,"w":[451,679],"d":[1.4,1.4]},{"n":"Zechariah","t":"OT","f":1,"tot":14,"w":[622,317,296,365,338,424,378,703,537,408,502,462,337,754],"d":[2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Malachi","t":"OT","f":1,"tot":4,"w":[487,546,565,183],"d":[1.4,1.4,1.4,1.4]},{"n":"Matthew","t":"NT","f":1,"tot":28,"w":[473,619,387,557,1081,794,626,773,837,919,668,1168,1367,721,785,688,620,869,719,779,1126,828,833,1047,995,1625,1359,421],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Mark","t":"NT","f":1,"tot":16,"w":[930,724,663,923,952,1323,806,842,1164,1218,778,1058,828,1595,913,449],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Luke","t":"NT","f":1,"tot":24,"w":[1583,1094,1017,1021,949,1229,1209,1431,1457,992,1331,1407,864,812,725,752,809,868,1047,954,820,1396,1117,1055],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"John","t":"NT","f":1,"tot":21,"w":[1004,510,763,1094,1001,1506,1002,1307,876,820,1157,1060,826,731,613,789,636,947,1010,749,693],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Acts","t":"NT","f":1,"tot":28,"w":[661,1021,634,865,1026,355,1430,883,1046,1108,667,662,1273,627,925,943,855,664,975,882,1067,773,921,640,711,781,1033,818],"d":[1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1]},{"n":"Romans","t":"NT","f":1,"tot":16,"w":[714,604,562,546,480,484,605,903,719,461,818,397,361,525,742,501],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"1 Corinthians","t":"NT","f":1,"tot":16,"w":[649,373,459,509,321,465,959,309,671,667,718,593,270,887,1166,446],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"2 Corinthians","t":"NT","f":1,"tot":13,"w":[591,401,389,406,487,357,452,568,355,437,718,589,315],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7]},{"n":"Galatians","t":"NT","f":1,"tot":6,"w":[453,573,648,610,447,353],"d":[1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Ephesians","t":"NT","f":1,"tot":6,"w":[508,453,410,617,564,470],"d":[1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Philippians","t":"NT","f":1,"tot":4,"w":[632,601,483,467],"d":[1.3,1.3,1.3,1.3]},{"n":"Colossians","t":"NT","f":1,"tot":4,"w":[656,503,457,363],"d":[1.5,1.5,1.5,1.5]},{"n":"1 Thessalonians","t":"NT","f":1,"tot":5,"w":[253,479,295,396,414],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"2 Thessalonians","t":"NT","f":1,"tot":3,"w":[291,381,350],"d":[1.4,1.4,1.4]},{"n":"1 Timothy","t":"NT","f":1,"tot":6,"w":[432,247,324,310,470,461],"d":[1.4,1.4,1.4,1.4,1.4,1.4]},{"n":"2 Timothy","t":"NT","f":1,"tot":4,"w":[438,506,297,425],"d":[1.4,1.4,1.4,1.4]},{"n":"Titus","t":"NT","f":1,"tot":3,"w":[337,265,294],"d":[1.4,1.4,1.4]},{"n":"Philemon","t":"NT","f":1,"tot":1,"w":[430],"d":[1.3]},{"n":"Hebrews","t":"NT","f":1,"tot":13,"w":[338,472,362,404,321,425,607,387,678,784,922,696,501],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7]},{"n":"James","t":"NT","f":1,"tot":5,"w":[544,528,378,369,485],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"1 Peter","t":"NT","f":1,"tot":5,"w":[597,548,551,479,300],"d":[1.5,1.5,1.5,1.5,1.5]},{"n":"2 Peter","t":"NT","f":1,"tot":3,"w":[488,581,484],"d":[1.6,1.6,1.6]},{"n":"1 John","t":"NT","f":1,"tot":5,"w":[247,735,534,480,520],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"2 John","t":"NT","f":1,"tot":1,"w":[298],"d":[1.4]},{"n":"3 John","t":"NT","f":1,"tot":1,"w":[295],"d":[1.4]},{"n":"Jude","t":"NT","f":1,"tot":1,"w":[608],"d":[1.5]},{"n":"Revelation","t":"NT","f":1,"tot":22,"w":[592,802,658,348,435,540,491,397,592,353,580,497,538,651,252,567,522,747,634,477,749,573],"d":[2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]}]};
+const KEY = 'bible92_v3', DEF_START = '2026-10-23', DEF_TARGET = 8600;
+const L = {read: KEY+'_read', frozen: KEY+'_frozen', prog: KEY+'_prog', start: KEY+'_start', target: KEY+'_target'};
+function ls(k, def) { try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch (e) { return def; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+const fr = n => Math.round(n).toLocaleString('en-US');
 
-    function getStart() {
-        let s = null;
-        try { s = localStorage.getItem(START_KEY); } catch (e) {}
-        return /^\d{4}-\d{2}-\d{2}$/.test(s || '') ? s : DEFAULT_START;
+/* ---------- Planificateur ---------- */
+function prep(S) {
+  const n = S.length, cw = [0], cd = [0], bs = [], be = [];
+  S.forEach(k => { cw.push(cw[cw.length-1] + k.w); cd.push(cd[cd.length-1] + k.w * k.d); });
+  for (let i = 0; i < n; i++) {
+    let j = i; while (j > 0 && S[j-1].bi === S[i].bi && S[j-1].c === S[j].c - 1) j--; bs[i] = j;
+    j = i; while (j+1 < n && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++; be[i] = j + 1;
+  }
+  return {n, cw, cd, bs, be};
+}
+function valid(P, a, b, mp) {
+  if (a > 0 && a < P.n && P.bs[a] < a && Math.min(b, P.be[a]) - a < mp) return false;
+  if (b > 0 && b < P.n && P.bs[b] < b && b - Math.max(a, P.bs[b-1]) < mp) return false;
+  return true;
+}
+function dp(P, ow, od, maxlen, mp, wlo, whi, mu, ntT, N, Wt, Dt, empty) {
+  const n = P.n, INF = 1e18, S = n + 1;
+  if (n === 0) return new Array(N + 1).fill(0);
+  const f = new Float64Array((N + 1) * S).fill(INF), bk = new Int32Array((N + 1) * S);
+  f[0] = 0;
+  for (let d = 1; d <= N; d++) {
+    for (let b = empty ? 0 : 1; b <= n; b++) {
+      for (let a = Math.max(0, b - maxlen); a <= (empty ? b : b - 1); a++) {
+        const fa = f[(d-1)*S + a]; if (fa >= INF) continue;
+        const w = P.cw[b] - P.cw[a], W = w + ow[d-1];
+        if (W > whi || W < wlo) continue;
+        if (a < b && !valid(P, a, b, mp)) continue;
+        const D = P.cd[b] - P.cd[a] + od[d-1];
+        const c = fa + (D-Dt)**2 + 1.2*(W-Wt)**2 + (a < b ? mu*(w-ntT)**2 : 4e6);
+        if (c < f[d*S + b]) { f[d*S + b] = c; bk[d*S + b] = a; }
+      }
     }
+  }
+  if (f[N*S + n] >= INF) return null;
+  const cuts = [n]; for (let d = N; d > 0; d--) cuts.push(bk[d*S + cuts[cuts.length-1]]);
+  return cuts.reverse();
+}
+function ladder(P, ow, od, maxlen, mp, lo, hi, mu, ntT, N, Wt, Dt) {
+  const tries = [[mp,false,lo,hi],[mp,true,lo,hi],[1,true,lo,hi],[1,true,0,1e18]];
+  for (const [m,e,l,h] of tries) { const r = dp(P, ow, od, maxlen, m, l, h, mu, ntT, N, Wt, Dt, e); if (r) return r; }
+}
+const sums = (P, c, N) => { const w = [], d = []; for (let i = 0; i < N; i++) { w.push(P.cw[c[i+1]] - P.cw[c[i]]); d.push(P.cd[c[i+1]] - P.cd[c[i]]); } return [w, d]; };
+function fmt(S, a, b, segs) {
+  const out = []; let i = a;
+  while (i < b) {
+    let j = i; while (j+1 < b && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++;
+    const bk = DATA.books[S[i].bi], x = S[i].c, z = S[j].c;
+    out.push(bk.tot === 1 ? bk.n + ' 1' : (x === z ? bk.n + ' ' + x : bk.n + ' ' + x + '-' + z));
+    segs.push([S[i].bi, x, z]); i = j + 1;
+  }
+  return out.join('; ');
+}
+function computePlan(readSet, frozen, target) {
+  const used = new Set(); frozen.forEach(d => d.segs.forEach(([bi,a,z]) => { for (let c = a; c <= z; c++) used.add(bi + ':' + c); }));
+  const OT = [], NT = [];
+  DATA.books.forEach((bk, bi) => {
+    if (readSet.has(bk.n)) return;
+    bk.w.forEach((w, i) => { const c = bk.f + i; if (!used.has(bi + ':' + c)) (bk.t === 'OT' ? OT : NT).push({bi, c, w, d: bk.d[i]}); });
+  });
+  const PO = prep(OT), PN = prep(NT), R = PO.cw[PO.n] + PN.cw[PN.n];
+  if (R <= 0) return [];
+  const N = Math.max(1, Math.round(R / target)), Wt = R / N, Dt = (PO.cd[PO.n] + PN.cd[PN.n]) / N, ntT = PN.cw[PN.n] / N;
+  let nw = Array(N).fill(ntT), nd = Array(N).fill(ntT * 1.4), cO, cN, ow, od;
+  for (let it = 0; it < 3; it++) {
+    cO = ladder(PO, nw, nd, 70, 3, 0.8*Wt, 1.3*Wt, 0, 0, N, Wt, Dt); [ow, od] = sums(PO, cO, N);
+    cN = ladder(PN, ow, od, 10, 2, 0.6*Wt, 1.5*Wt, 1.5, ntT, N, Wt, Dt); [nw, nd] = sums(PN, cN, N);
+  }
+  const days = [];
+  for (let i = 0; i < N; i++) {
+    const segs = [], ot = fmt(OT, cO[i], cO[i+1], segs), nt = fmt(NT, cN[i], cN[i+1], segs);
+    days.push({ot, nt, ow: ow[i], nw: nw[i], words: ow[i] + nw[i], segs});
+  }
+  return days;
+}
 
-    function setStart(value) {
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return;
-        try { localStorage.setItem(START_KEY, value); } catch (e) {}
-        renderPlan();
-    }
+/* ---------- Etat ---------- */
+let readSet = new Set(ls(L.read, [])), frozen = ls(L.frozen, []), target = ls(L.target, DEF_TARGET), plan = [];
+const getProg = () => ls(L.prog, {});
+const getStart = () => { const s = ls(L.start, DEF_START); return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : DEF_START; };
+function dateFor(i) {
+  const [y, m, d] = getStart().split('-').map(Number), dt = new Date(y, m-1, d + i), p = n => String(n).padStart(2, '0');
+  return p(dt.getDate()) + '/' + p(dt.getMonth()+1) + '/' + dt.getFullYear();
+}
+function lastTicked() { const p = getProg(); let m = -1; Object.keys(p).forEach(k => { if (p[k]) m = Math.max(m, +k); }); return m; }
+function replan(freeze) {
+  if (freeze) { frozen = plan.slice(0, lastTicked() + 1); lsSet(L.frozen, frozen); }
+  plan = frozen.concat(computePlan(readSet, frozen, target));
+}
 
-    function dateFor(index) {
-        const [y, m, d] = getStart().split('-').map(Number);
-        const dt = new Date(y, m - 1, d + index);
-        const pad = n => String(n).padStart(2, '0');
-        return `${pad(dt.getDate())}/${pad(dt.getMonth() + 1)}/${dt.getFullYear()}`;
-    }
+/* ---------- Interface ---------- */
+function renderBooks() {
+  const box = document.getElementById('books');
+  box.innerHTML = ['OT', 'NT'].map(t => '<div><h3>' + (t === 'OT' ? 'Old Testament' : 'New Testament') + '</h3>' +
+    DATA.books.map((b, i) => b.t !== t ? '' :
+      '<label class="book"><input type="checkbox" ' + (readSet.has(b.n) ? 'checked' : '') + ' onchange="toggleBook(' + i + ')">' + b.n +
+      '<span>' + fr(b.w.reduce((a, c) => a + c, 0)) + '</span></label>').join('') + '</div>').join('');
+  document.getElementById('books-count').innerText = readSet.size ? '(' + readSet.size + ' checked)' : '';
+}
+function render() {
+  const prog = getProg(), list = document.getElementById('plan-list'); list.innerHTML = '';
+  let done = 0, wordsRead = 0, total = 0;
+  plan.forEach((day, i) => {
+    total += day.words; const ok = !!prog[i]; if (ok) { done++; wordsRead += day.words; }
+    const card = document.createElement('div'); card.className = 'day-card' + (ok ? ' completed' : '');
+    card.innerHTML = '<div class="checkbox-container"><input type="checkbox" ' + (ok ? 'checked' : '') + ' onchange="toggleDay(' + i + ')"></div>' +
+      '<div class="date-badge">' + dateFor(i) + '</div><div class="passages">' +
+      (day.ot ? '<div class="passage-row passage-text"><span class="tag tag-ot">OT</span>' + day.ot + '</div>' : '') +
+      (day.nt ? '<div class="passage-row passage-text"><span class="tag tag-nt">NT</span>' + day.nt + '</div>' : '') +
+      '</div><div class="word-count">' + fr(day.words) + ' words</div>';
+    list.appendChild(card);
+  });
+  const pct = plan.length ? Math.round(done / plan.length * 100) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').innerText = done + ' / ' + plan.length + ' days (' + pct + '%)';
+  document.getElementById('words-read-text').innerText = fr(wordsRead) + ' / ' + fr(total) + ' words read';
+  document.getElementById('start-date').value = getStart();
+  document.getElementById('target').value = target;
+  document.getElementById('end-text').innerText = plan.length ? 'Ends ' + dateFor(plan.length - 1) : '';
+}
+function toggleDay(i) { const p = getProg(); p[i] = !p[i]; lsSet(L.prog, p); render(); }
+function toggleBook(i) {
+  const n = DATA.books[i].n; readSet.has(n) ? readSet.delete(n) : readSet.add(n);
+  lsSet(L.read, [...readSet]); replan(true); renderBooks(); render();
+}
+function setStart(v) { if (/^\d{4}-\d{2}-\d{2}$/.test(v)) { lsSet(L.start, v); render(); } }
+function setTarget(v) { v = parseInt(v, 10); if (v >= 2000 && v <= 40000) { target = v; lsSet(L.target, v); replan(true); } render(); }
+function resetProgress() {
+  if (!confirm('Reset your progress and checked books?')) return;
+  readSet = new Set(); frozen = []; [L.read, L.frozen, L.prog].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  replan(false); renderBooks(); render();
+}
+if (typeof document !== 'undefined') { replan(false); renderBooks(); render(); }
 
-    // Load saved progress from localStorage
-    function getSavedProgress() {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : {};
-        } catch (e) { return {}; }
-    }
-
-    // Save progress to localStorage
-    function saveProgress(progress) {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
-    }
-
-    // Render the reading plan list
-    function renderPlan() {
-        const listContainer = document.getElementById('plan-list');
-        const progress = getSavedProgress();
-        listContainer.innerHTML = '';
-
-        let completedDays = 0;
-        let totalWordsRead = 0;
-        const totalWordsOverall = planData.reduce((acc, curr) => acc + curr['Total Words'], 0);
-
-        planData.forEach((day, index) => {
-            const isCompleted = !!progress[index];
-            if (isCompleted) {
-                completedDays++;
-                totalWordsRead += day['Total Words'];
-            }
-
-            const card = document.createElement('div');
-            card.className = `day-card ${isCompleted ? 'completed' : ''}`;
-
-            card.innerHTML = `
-                <div class="checkbox-container">
-                    <input type="checkbox" id="chk-${index}" ${isCompleted ? 'checked' : ''} onchange="toggleDay(${index})">
-                </div>
-                <div class="date-badge">${dateFor(index)}</div>
-                <div class="passages">
-                    <div class="passage-row passage-text"><span class="tag tag-ot">OT</span>${day['OT Passage']}</div>
-                    <div class="passage-row passage-text"><span class="tag tag-nt">NT</span>${day['NT Passage']}</div>
-                </div>
-                <div class="word-count">${day['Total Words'].toLocaleString()} words</div>
-            `;
-
-            listContainer.appendChild(card);
-        });
-
-        document.getElementById('start-date').value = getStart();
-        document.getElementById('end-text').innerText = `Ends ${dateFor(planData.length - 1)}`;
-
-        // Update Progress Bar
-        const percentage = Math.round((completedDays / planData.length) * 100);
-        document.getElementById('progress-bar').style.width = `${percentage}%`;
-        document.getElementById('progress-text').innerText = `${completedDays} / ${planData.length} Days (${percentage}%)`;
-        document.getElementById('words-read-text').innerText = `${totalWordsRead.toLocaleString()} / ${totalWordsOverall.toLocaleString()} total words read`;
-    }
-
-    // Toggle day completion status
-    function toggleDay(index) {
-        const progress = getSavedProgress();
-        progress[index] = !progress[index];
-        saveProgress(progress);
-        renderPlan();
-    }
-
-    // Reset all progress
-    function resetProgress() {
-        if (confirm("Are you sure you want to reset your reading progress?")) {
-            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-            renderPlan();
-        }
-    }
-
-    // Initial render
-    renderPlan();
 </script>
-
 </body>
 </html>
