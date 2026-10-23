@@ -267,6 +267,34 @@
         label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
         label.book input{accent-color:var(--success)}
         @media (max-width:640px){#books{grid-template-columns:1fr}}
+
+        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
+        .controls{flex-wrap:wrap;gap:10px}
+        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
+        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
+        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
+        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
+        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
+        label.book input{accent-color:var(--success)}
+        .quiz-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--text-muted)}
+        .quiz-link{font:inherit;font-size:.75rem;padding:2px 8px;border:1px solid #cbd5e1;border-radius:6px;color:var(--primary);background:transparent;text-decoration:none;cursor:pointer}
+        .quiz-link:hover{background:#eff6ff;border-color:var(--primary)}
+        @media (max-width:640px){#books{grid-template-columns:1fr}}
+
+        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
+        .controls{flex-wrap:wrap;gap:10px}
+        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
+        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
+        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
+        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
+        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
+        label.book input{accent-color:var(--success)}
+        .quiz-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--text-muted)}
+        .quiz-link{font:inherit;font-size:.75rem;padding:2px 8px;border:1px solid #cbd5e1;border-radius:6px;color:var(--primary);background:transparent;text-decoration:none;cursor:pointer}
+        .quiz-link:hover{background:#eff6ff;border-color:var(--primary)}
+        @media (max-width:640px){#books{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -404,6 +432,10 @@ function render() {
       '<div class="date-badge">' + dateFor(i) + '</div><div class="passages">' +
       (day.ot ? '<div class="passage-row passage-text"><span class="tag tag-ot">OT</span>' + day.ot + '</div>' : '') +
       (day.nt ? '<div class="passage-row passage-text"><span class="tag tag-nt">NT</span>' + day.nt + '</div>' : '') +
+      '<div class="quiz-row"><span>Quiz:</span>' +
+      '<a class="quiz-link" target="_blank" rel="noopener" href="https://claude.ai/new?q=' + encodeURIComponent(quizPrompt(day)) + '">Claude</a>' +
+      '<a class="quiz-link" target="_blank" rel="noopener" href="https://chatgpt.com/?q=' + encodeURIComponent(quizPrompt(day)) + '">ChatGPT</a>' +
+      '<button class="quiz-link" onclick="copyPrompt(' + i + ', this)">Copy prompt</button></div>' +
       '</div><div class="word-count">' + fr(day.words) + ' words</div>';
     list.appendChild(card);
   });
@@ -414,6 +446,20 @@ function render() {
   document.getElementById('start-date').value = getStart();
   document.getElementById('target').value = target;
   document.getElementById('end-text').innerText = plan.length ? 'Ends ' + dateFor(plan.length - 1) : '';
+}
+function quizPrompt(day) {
+  const parts = [];
+  if (day.ot) parts.push('Old Testament: ' + day.ot);
+  if (day.nt) parts.push('New Testament: ' + day.nt);
+  return "Create an interactive multiple-choice quiz (MCQ) on today's Bible reading (KJV). " + parts.join('. ') + '. ' +
+    'Build it as a clickable interactive app (an artifact, canvas or interactive widget, not a plain text list) with 10 questions that test understanding of the main events, themes, people and meaning in context, not trivia. ' +
+    'Show one question at a time with 4 answer options and a progress indicator. After I pick an answer, show immediately whether it is correct, with a short explanation referring to the passage. ' +
+    'At the end, show my score, the questions I missed, and a 3-line summary of the key takeaways.';
+}
+function copyPrompt(i, btn) {
+  const text = quizPrompt(plan[i]), done = () => { const o = btn.innerText; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = o, 1500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => {});
+  else { const a = document.createElement('textarea'); a.value = text; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done(); }
 }
 function toggleDay(i) { const p = getProg(); p[i] = !p[i]; lsSet(L.prog, p); render(); }
 function toggleBook(i) {
