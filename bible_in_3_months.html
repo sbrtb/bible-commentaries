@@ -15,6 +15,7 @@
             --border: #e2e8f0;
             --success: #10b981;
             --success-bg: #ecfdf5;
+            --danger: #ef4444;
         }
 
         body {
@@ -92,6 +93,8 @@
             margin-top: 16px;
             padding-top: 12px;
             border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .start-picker {
@@ -103,13 +106,18 @@
             flex-wrap: wrap;
         }
 
-        .start-picker input[type="date"] {
+        .start-picker input[type="date"],
+        .start-picker input[type="number"] {
             font: inherit;
             color: var(--text);
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             padding: 4px 8px;
             background: var(--card-bg);
+        }
+
+        .start-picker input[type="number"] {
+            width: 84px;
         }
 
         .btn-reset {
@@ -125,8 +133,58 @@
 
         .btn-reset:hover {
             background: #f1f5f9;
-            color: #ef4444;
+            color: var(--danger);
             border-color: #fca5a5;
+        }
+
+        details.books-panel {
+            margin-top: 12px;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+
+        details.books-panel summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .9rem;
+            color: var(--primary);
+        }
+
+        #books {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 10px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        #books h3 {
+            margin: 0 0 6px;
+            font-size: .8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        label.book {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .85rem;
+            padding: 3px 0;
+            cursor: pointer;
+        }
+
+        label.book span {
+            margin-left: auto;
+            color: var(--text-muted);
+            font-size: .75rem;
+        }
+
+        label.book input,
+        .checkbox-container input {
+            accent-color: var(--success);
         }
 
         .plan-list {
@@ -173,7 +231,6 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
-            accent-color: var(--success);
         }
 
         .date-badge {
@@ -228,6 +285,34 @@
             font-weight: 500;
         }
 
+        .quiz-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        .quiz-link {
+            font: inherit;
+            font-size: .75rem;
+            padding: 2px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            color: var(--primary);
+            background: transparent;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .quiz-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
         @media (max-width: 640px) {
             .day-card {
                 grid-template-columns: auto 1fr;
@@ -244,58 +329,11 @@
                 grid-column: 1 / -1;
                 text-align: left;
             }
+            #books {
+                grid-template-columns: 1fr;
+            }
         }
-    
-        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
-        .controls{flex-wrap:wrap;gap:10px}
-        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
-        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
-        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
-        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
-        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
-        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
-        label.book input{accent-color:var(--success)}
-        @media (max-width:640px){#books{grid-template-columns:1fr}}
-
-        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
-        .controls{flex-wrap:wrap;gap:10px}
-        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
-        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
-        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
-        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
-        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
-        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
-        label.book input{accent-color:var(--success)}
-        @media (max-width:640px){#books{grid-template-columns:1fr}}
-
-        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
-        .controls{flex-wrap:wrap;gap:10px}
-        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
-        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
-        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
-        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
-        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
-        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
-        label.book input{accent-color:var(--success)}
-        .quiz-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--text-muted)}
-        .quiz-link{font:inherit;font-size:.75rem;padding:2px 8px;border:1px solid #cbd5e1;border-radius:6px;color:var(--primary);background:transparent;text-decoration:none;cursor:pointer}
-        .quiz-link:hover{background:#eff6ff;border-color:var(--primary)}
-        @media (max-width:640px){#books{grid-template-columns:1fr}}
-
-        .start-picker input[type="number"]{font:inherit;width:84px;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;background:var(--card-bg);color:var(--text)}
-        .controls{flex-wrap:wrap;gap:10px}
-        details.books-panel{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
-        details.books-panel summary{cursor:pointer;font-weight:600;font-size:.9rem}
-        #books{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;max-height:260px;overflow-y:auto}
-        #books h3{margin:0 0 6px;font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
-        label.book{display:flex;align-items:center;gap:6px;font-size:.85rem;padding:2px 0;cursor:pointer}
-        label.book span{margin-left:auto;color:var(--text-muted);font-size:.75rem}
-        label.book input{accent-color:var(--success)}
-        .quiz-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--text-muted)}
-        .quiz-link{font:inherit;font-size:.75rem;padding:2px 8px;border:1px solid #cbd5e1;border-radius:6px;color:var(--primary);background:transparent;text-decoration:none;cursor:pointer}
-        .quiz-link:hover{background:#eff6ff;border-color:var(--primary)}
-        @media (max-width:640px){#books{grid-template-columns:1fr}}
-</style>
+    </style>
 </head>
 <body>
 <div class="container">
@@ -316,180 +354,208 @@
     </header>
     <div class="plan-list" id="plan-list"></div>
 </div>
+
 <script>
 const DATA = {"books":[{"n":"Genesis","t":"OT","f":1,"tot":50,"w":[797,632,695,632,505,579,584,586,658,496,606,536,457,607,471,412,679,867,1108,498,775,629,539,1816,706,889,1262,621,829,1022,1417,794,508,790,664,845,942,819,666,580,1404,977,938,874,731,766,965,639,766,687],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Exodus","t":"OT","f":1,"tot":40,"w":[457,657,791,891,594,753,692,936,982,899,325,1493,675,931,713,1062,465,760,702,561,893,790,827,492,926,937,558,1235,1341,970,438,1092,710,1004,820,892,738,831,1030,821],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.0,1.0,1.0,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Leviticus","t":"OT","f":1,"tot":27,"w":[525,487,511,1157,723,892,1057,988,624,628,1115,262,1857,1713,919,1157,553,667,898,836,587,880,1222,551,1532,1246,956],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Numbers","t":"OT","f":1,"tot":36,"w":[1333,828,1291,1416,898,742,1939,687,722,891,1056,384,742,1180,1068,1341,335,1111,683,791,931,1201,743,660,445,1446,610,779,954,503,1208,1009,928,630,965,445],"d":[1.6,1.6,1.6,1.6,1.4,1.4,1.6,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.6,1.4,1.4,1.4,1.4,1.4,1.4,1.6,1.6,1.4,1.4]},{"n":"Deuteronomy","t":"OT","f":1,"tot":34,"w":[1262,1021,815,1503,921,643,843,566,963,604,950,1055,627,707,707,710,707,611,608,646,731,894,685,681,562,667,599,2075,851,665,1041,1306,805,320],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Joshua","t":"OT","f":1,"tot":24,"w":[573,768,566,706,550,904,926,1221,800,1393,717,486,825,485,1032,253,660,770,944,308,1026,1321,574,1044],"d":[1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.1,1.1,1.1]},{"n":"Judges","t":"OT","f":1,"tot":21,"w":[962,692,842,761,755,1295,952,987,1667,473,1235,399,765,706,648,1110,385,1035,1102,1455,740],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Ruth","t":"OT","f":1,"tot":4,"w":[649,763,541,621],"d":[1.0,1.0,1.0,1.0]},{"n":"1 Samuel","t":"OT","f":1,"tot":31,"w":[782,1104,549,733,439,752,510,541,990,862,503,771,697,1606,981,680,1719,845,696,1289,499,761,831,661,1452,849,385,835,421,956,348],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"2 Samuel","t":"OT","f":1,"tot":24,"w":[712,911,1143,434,624,713,858,447,408,608,814,992,1148,1117,1118,738,935,1096,1473,848,778,951,878,855],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"1 Kings","t":"OT","f":1,"tot":22,"w":[1499,1510,850,706,527,1018,1482,2139,826,839,1253,1038,1138,987,951,1035,680,1397,732,1480,908,1517],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"2 Kings","t":"OT","f":1,"tot":25,"w":[669,848,848,1368,975,1019,824,953,1205,1203,738,688,775,881,1092,656,1245,1221,1148,660,747,712,1477,584,985],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"1 Chronicles","t":"OT","f":1,"tot":29,"w":[683,846,347,852,664,1341,831,491,960,364,944,987,386,357,714,850,779,399,630,289,914,605,681,541,543,710,805,864,988],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.2,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.2,1.2]},{"n":"2 Chronicles","t":"OT","f":1,"tot":36,"w":[530,645,481,595,497,1402,748,536,882,559,486,481,642,448,518,479,459,1051,352,1148,623,444,788,933,970,721,244,896,1157,869,757,1084,780,1223,900,741],"d":[1.3,1.3,1.3,1.3,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1]},{"n":"Ezra","t":"OT","f":1,"tot":10,"w":[371,998,547,769,583,778,863,990,617,924],"d":[1.2,1.5,1.2,1.2,1.2,1.2,1.2,1.5,1.2,1.5]},{"n":"Nehemiah","t":"OT","f":1,"tot":13,"w":[390,718,896,716,636,602,1176,686,1328,652,788,930,962],"d":[1.2,1.2,1.6,1.2,1.2,1.2,1.6,1.2,1.2,1.6,1.6,1.6,1.2]},{"n":"Esther","t":"OT","f":1,"tot":10,"w":[716,806,552,517,494,476,343,649,984,93],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Job","t":"OT","f":1,"tot":42,"w":[641,387,434,336,447,482,394,340,544,402,337,399,413,410,549,375,262,342,475,521,522,482,280,481,90,206,373,455,404,514,691,375,524,615,254,495,402,659,477,361,507,441],"d":[1.0,1.0,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.0]},{"n":"Psalms","t":"OT","f":1,"tot":150,"w":[130,206,139,165,245,159,327,166,367,350,128,147,107,149,99,206,311,918,272,144,246,581,118,178,342,183,340,201,179,231,498,241,350,347,564,223,702,361,270,400,240,281,130,451,327,204,143,229,337,400,322,165,152,110,435,225,230,218,339,211,133,228,194,184,267,327,111,698,670,102,471,369,423,413,189,193,330,1225,277,334,288,116,273,226,207,312,113,296,879,320,288,258,92,356,199,226,189,170,157,86,173,455,342,598,632,762,685,206,534,142,177,172,142,106,274,287,33,465,2423,88,110,124,94,121,108,94,110,101,119,116,60,276,69,44,329,353,165,172,410,239,203,151,252,302,331,178,299,202,143,85],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Proverbs","t":"OT","f":1,"tot":31,"w":[519,309,541,418,354,546,411,562,288,527,524,476,400,572,544,543,476,381,506,498,501,495,566,580,522,459,460,528,425,640,467],"d":[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Ecclesiastes","t":"OT","f":1,"tot":12,"w":[380,734,517,380,533,301,618,515,555,402,273,372],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Song of Songs","t":"OT","f":1,"tot":8,"w":[326,351,287,363,397,282,292,360],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Isaiah","t":"OT","f":1,"tot":66,"w":[758,568,587,210,863,366,693,558,599,928,519,134,576,856,266,415,428,255,730,169,417,675,469,592,381,550,405,814,742,1059,322,436,585,522,277,690,1131,592,268,796,804,676,711,886,774,342,471,627,867,365,771,405,387,493,399,361,569,522,591,665,380,362,538,308,753,811],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Jeremiah","t":"OT","f":1,"tot":52,"w":[528,1019,802,861,874,827,970,706,772,674,749,544,739,688,702,699,829,659,541,594,498,837,1186,361,1138,800,762,540,1005,717,1294,1432,842,824,657,1110,611,984,545,681,664,774,460,1228,152,821,215,1172,1180,1460,1853,1074],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.2,1.2,1.2,1.2,1.6,1.6,1.6,1.6,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.8,1.8,1.8,1.8,1.8,1.8,1.0]},{"n":"Lamentations","t":"OT","f":1,"tot":5,"w":[758,883,876,598,296],"d":[1.5,1.5,1.5,1.5,1.5]},{"n":"Ezekiel","t":"OT","f":1,"tot":48,"w":[870,273,809,519,628,470,768,655,400,659,721,799,738,746,205,1820,773,919,356,1601,945,840,1322,774,508,727,907,809,714,760,679,1077,1071,958,402,1180,870,776,928,1530,802,568,907,1031,882,880,780,1045],"d":[2.0,2.0,2.0,1.8,1.8,1.8,1.8,2.0,2.0,2.0,2.0,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Daniel","t":"OT","f":1,"tot":12,"w":[589,1500,992,1290,995,905,926,852,966,647,1530,411],"d":[1.1,1.1,1.1,1.1,1.1,1.1,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Hosea","t":"OT","f":1,"tot":14,"w":[355,678,156,465,368,254,398,330,468,425,308,311,426,232],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"Joel","t":"OT","f":1,"tot":3,"w":[508,957,568],"d":[1.7,1.7,1.7]},{"n":"Amos","t":"OT","f":1,"tot":9,"w":[455,441,397,432,658,399,471,414,549],"d":[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Obadiah","t":"OT","f":1,"tot":1,"w":[669],"d":[1.6]},{"n":"Jonah","t":"OT","f":1,"tot":4,"w":[514,214,260,332],"d":[1.0,1.0,1.0,1.0]},{"n":"Micah","t":"OT","f":1,"tot":7,"w":[452,400,354,476,447,440,583],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Nahum","t":"OT","f":1,"tot":3,"w":[394,371,519],"d":[1.7,1.7,1.7]},{"n":"Habakkuk","t":"OT","f":1,"tot":3,"w":[423,563,489],"d":[1.6,1.6,1.6]},{"n":"Zephaniah","t":"OT","f":1,"tot":3,"w":[555,463,598],"d":[1.6,1.6,1.6]},{"n":"Haggai","t":"OT","f":1,"tot":2,"w":[451,679],"d":[1.4,1.4]},{"n":"Zechariah","t":"OT","f":1,"tot":14,"w":[622,317,296,365,338,424,378,703,537,408,502,462,337,754],"d":[2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]},{"n":"Malachi","t":"OT","f":1,"tot":4,"w":[487,546,565,183],"d":[1.4,1.4,1.4,1.4]},{"n":"Matthew","t":"NT","f":1,"tot":28,"w":[473,619,387,557,1081,794,626,773,837,919,668,1168,1367,721,785,688,620,869,719,779,1126,828,833,1047,995,1625,1359,421],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Mark","t":"NT","f":1,"tot":16,"w":[930,724,663,923,952,1323,806,842,1164,1218,778,1058,828,1595,913,449],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"Luke","t":"NT","f":1,"tot":24,"w":[1583,1094,1017,1021,949,1229,1209,1431,1457,992,1331,1407,864,812,725,752,809,868,1047,954,820,1396,1117,1055],"d":[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]},{"n":"John","t":"NT","f":1,"tot":21,"w":[1004,510,763,1094,1001,1506,1002,1307,876,820,1157,1060,826,731,613,789,636,947,1010,749,693],"d":[1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3]},{"n":"Acts","t":"NT","f":1,"tot":28,"w":[661,1021,634,865,1026,355,1430,883,1046,1108,667,662,1273,627,925,943,855,664,975,882,1067,773,921,640,711,781,1033,818],"d":[1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1]},{"n":"Romans","t":"NT","f":1,"tot":16,"w":[714,604,562,546,480,484,605,903,719,461,818,397,361,525,742,501],"d":[1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.8]},{"n":"1 Corinthians","t":"NT","f":1,"tot":16,"w":[649,373,459,509,321,465,959,309,671,667,718,593,270,887,1166,446],"d":[1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"2 Corinthians","t":"NT","f":1,"tot":13,"w":[591,401,389,406,487,357,452,568,355,437,718,589,315],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7]},{"n":"Galatians","t":"NT","f":1,"tot":6,"w":[453,573,648,610,447,353],"d":[1.6,1.6,1.6,1.6,1.6,1.6]},{"n":"Ephesians","t":"NT","f":1,"tot":6,"w":[508,453,410,617,564,470],"d":[1.5,1.5,1.5,1.5,1.5,1.5]},{"n":"Philippians","t":"NT","f":1,"tot":4,"w":[632,601,483,467],"d":[1.3,1.3,1.3,1.3]},{"n":"Colossians","t":"NT","f":1,"tot":4,"w":[656,503,457,363],"d":[1.5,1.5,1.5,1.5]},{"n":"1 Thessalonians","t":"NT","f":1,"tot":5,"w":[253,479,295,396,414],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"2 Thessalonians","t":"NT","f":1,"tot":3,"w":[291,381,350],"d":[1.4,1.4,1.4]},{"n":"1 Timothy","t":"NT","f":1,"tot":6,"w":[432,247,324,310,470,461],"d":[1.4,1.4,1.4,1.4,1.4,1.4]},{"n":"2 Timothy","t":"NT","f":1,"tot":4,"w":[438,506,297,425],"d":[1.4,1.4,1.4,1.4]},{"n":"Titus","t":"NT","f":1,"tot":3,"w":[337,265,294],"d":[1.4,1.4,1.4]},{"n":"Philemon","t":"NT","f":1,"tot":1,"w":[430],"d":[1.3]},{"n":"Hebrews","t":"NT","f":1,"tot":13,"w":[338,472,362,404,321,425,607,387,678,784,922,696,501],"d":[1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7]},{"n":"James","t":"NT","f":1,"tot":5,"w":[544,528,378,369,485],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"1 Peter","t":"NT","f":1,"tot":5,"w":[597,548,551,479,300],"d":[1.5,1.5,1.5,1.5,1.5]},{"n":"2 Peter","t":"NT","f":1,"tot":3,"w":[488,581,484],"d":[1.6,1.6,1.6]},{"n":"1 John","t":"NT","f":1,"tot":5,"w":[247,735,534,480,520],"d":[1.4,1.4,1.4,1.4,1.4]},{"n":"2 John","t":"NT","f":1,"tot":1,"w":[298],"d":[1.4]},{"n":"3 John","t":"NT","f":1,"tot":1,"w":[295],"d":[1.4]},{"n":"Jude","t":"NT","f":1,"tot":1,"w":[608],"d":[1.5]},{"n":"Revelation","t":"NT","f":1,"tot":22,"w":[592,802,658,348,435,540,491,397,592,353,580,497,538,651,252,567,522,747,634,477,749,573],"d":[2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]}]};
+
 const KEY = 'bible92_v3', DEF_START = '2026-10-23', DEF_TARGET = 8600;
 const L = {read: KEY+'_read', frozen: KEY+'_frozen', prog: KEY+'_prog', start: KEY+'_start', target: KEY+'_target'};
-function ls(k, def) { try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch (e) { return def; } }
-function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+function ls(k, def) { 
+    try { 
+        const v = localStorage.getItem(k); 
+        return v === null ? def : JSON.parse(v); 
+    } catch (e) { 
+        return def; 
+    } 
+}
+
+function lsSet(k, v) { 
+    try { 
+        localStorage.setItem(k, JSON.stringify(v)); 
+    } catch (e) {} 
+}
+
 const fr = n => Math.round(n).toLocaleString('en-US');
 
 /* ---------- Planificateur ---------- */
 function prep(S) {
-  const n = S.length, cw = [0], cd = [0], bs = [], be = [];
-  S.forEach(k => { cw.push(cw[cw.length-1] + k.w); cd.push(cd[cd.length-1] + k.w * k.d); });
-  for (let i = 0; i < n; i++) {
-    let j = i; while (j > 0 && S[j-1].bi === S[i].bi && S[j-1].c === S[j].c - 1) j--; bs[i] = j;
-    j = i; while (j+1 < n && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++; be[i] = j + 1;
-  }
-  return {n, cw, cd, bs, be};
-}
-function valid(P, a, b, mp) {
-  if (a > 0 && a < P.n && P.bs[a] < a && Math.min(b, P.be[a]) - a < mp) return false;
-  if (b > 0 && b < P.n && P.bs[b] < b && b - Math.max(a, P.bs[b-1]) < mp) return false;
-  return true;
-}
-function dp(P, ow, od, maxlen, mp, wlo, whi, mu, ntT, N, Wt, Dt, empty) {
-  const n = P.n, INF = 1e18, S = n + 1;
-  if (n === 0) return new Array(N + 1).fill(0);
-  const f = new Float64Array((N + 1) * S).fill(INF), bk = new Int32Array((N + 1) * S);
-  f[0] = 0;
-  for (let d = 1; d <= N; d++) {
-    for (let b = empty ? 0 : 1; b <= n; b++) {
-      for (let a = Math.max(0, b - maxlen); a <= (empty ? b : b - 1); a++) {
-        const fa = f[(d-1)*S + a]; if (fa >= INF) continue;
-        const w = P.cw[b] - P.cw[a], W = w + ow[d-1];
-        if (W > whi || W < wlo) continue;
-        if (a < b && !valid(P, a, b, mp)) continue;
-        const D = P.cd[b] - P.cd[a] + od[d-1];
-        const c = fa + (D-Dt)**2 + 1.2*(W-Wt)**2 + (a < b ? mu*(w-ntT)**2 : 4e6);
-        if (c < f[d*S + b]) { f[d*S + b] = c; bk[d*S + b] = a; }
-      }
+    const n = S.length, cw = [0], cd = [0], bs = [], be = [];
+    S.forEach(k => { cw.push(cw[cw.length-1] + k.w); cd.push(cd[cd.length-1] + k.w * k.d); });
+    for (let i = 0; i < n; i++) {
+        let j = i; while (j > 0 && S[j-1].bi === S[i].bi && S[j-1].c === S[j].c - 1) j--; bs[i] = j;
+        j = i; while (j+1 < n && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++; be[i] = j + 1;
     }
-  }
-  if (f[N*S + n] >= INF) return null;
-  const cuts = [n]; for (let d = N; d > 0; d--) cuts.push(bk[d*S + cuts[cuts.length-1]]);
-  return cuts.reverse();
+    return {n, cw, cd, bs, be};
 }
+
+function valid(P, a, b, mp) {
+    if (a > 0 && a < P.n && P.bs[a] < a && Math.min(b, P.be[a]) - a < mp) return false;
+    if (b > 0 && b < P.n && P.bs[b] < b && b - Math.max(a, P.bs[b-1]) < mp) return false;
+    return true;
+}
+
+function dp(P, ow, od, maxlen, mp, wlo, whi, mu, ntT, N, Wt, Dt, empty) {
+    const n = P.n, INF = 1e18, S = n + 1;
+    if (n === 0) return new Array(N + 1).fill(0);
+    const f = new Float64Array((N + 1) * S).fill(INF), bk = new Int32Array((N + 1) * S);
+    f[0] = 0;
+    for (let d = 1; d <= N; d++) {
+        for (let b = empty ? 0 : 1; b <= n; b++) {
+            for (let a = Math.max(0, b - maxlen); a <= (empty ? b : b - 1); a++) {
+                const fa = f[(d-1)*S + a]; if (fa >= INF) continue;
+                const w = P.cw[b] - P.cw[a], W = w + ow[d-1];
+                if (W > whi || W < wlo) continue;
+                if (a < b && !valid(P, a, b, mp)) continue;
+                const D = P.cd[b] - P.cd[a] + od[d-1];
+                const c = fa + (D-Dt)**2 + 1.2*(W-Wt)**2 + (a < b ? mu*(w-ntT)**2 : 4e6);
+                if (c < f[d*S + b]) { f[d*S + b] = c; bk[d*S + b] = a; }
+            }
+        }
+    }
+    if (f[N*S + n] >= INF) return null;
+    const cuts = [n]; for (let d = N; d > 0; d--) cuts.push(bk[d*S + cuts[cuts.length-1]]);
+    return cuts.reverse();
+}
+
 function ladder(P, ow, od, maxlen, mp, lo, hi, mu, ntT, N, Wt, Dt) {
-  const tries = [[mp,false,lo,hi],[mp,true,lo,hi],[1,true,lo,hi],[1,true,0,1e18]];
-  for (const [m,e,l,h] of tries) { const r = dp(P, ow, od, maxlen, m, l, h, mu, ntT, N, Wt, Dt, e); if (r) return r; }
+    const tries = [[mp,false,lo,hi],[mp,true,lo,hi],[1,true,lo,hi],[1,true,0,1e18]];
+    for (const [m,e,l,h] of tries) { const r = dp(P, ow, od, maxlen, m, l, h, mu, ntT, N, Wt, Dt, e); if (r) return r; }
 }
+
 const sums = (P, c, N) => { const w = [], d = []; for (let i = 0; i < N; i++) { w.push(P.cw[c[i+1]] - P.cw[c[i]]); d.push(P.cd[c[i+1]] - P.cd[c[i]]); } return [w, d]; };
+
 function fmt(S, a, b, segs) {
-  const out = []; let i = a;
-  while (i < b) {
-    let j = i; while (j+1 < b && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++;
-    const bk = DATA.books[S[i].bi], x = S[i].c, z = S[j].c;
-    out.push(bk.tot === 1 ? bk.n + ' 1' : (x === z ? bk.n + ' ' + x : bk.n + ' ' + x + '-' + z));
-    segs.push([S[i].bi, x, z]); i = j + 1;
-  }
-  return out.join('; ');
+    const out = []; let i = a;
+    while (i < b) {
+        let j = i; while (j+1 < b && S[j+1].bi === S[i].bi && S[j+1].c === S[j].c + 1) j++;
+        const bk = DATA.books[S[i].bi], x = S[i].c, z = S[j].c;
+        out.push(bk.tot === 1 ? bk.n + ' 1' : (x === z ? bk.n + ' ' + x : bk.n + ' ' + x + '-' + z));
+        segs.push([S[i].bi, x, z]); i = j + 1;
+    }
+    return out.join('; ');
 }
+
 function computePlan(readSet, frozen, target) {
-  const used = new Set(); frozen.forEach(d => d.segs.forEach(([bi,a,z]) => { for (let c = a; c <= z; c++) used.add(bi + ':' + c); }));
-  const OT = [], NT = [];
-  DATA.books.forEach((bk, bi) => {
-    if (readSet.has(bk.n)) return;
-    bk.w.forEach((w, i) => { const c = bk.f + i; if (!used.has(bi + ':' + c)) (bk.t === 'OT' ? OT : NT).push({bi, c, w, d: bk.d[i]}); });
-  });
-  const PO = prep(OT), PN = prep(NT), R = PO.cw[PO.n] + PN.cw[PN.n];
-  if (R <= 0) return [];
-  const N = Math.max(1, Math.round(R / target)), Wt = R / N, Dt = (PO.cd[PO.n] + PN.cd[PN.n]) / N, ntT = PN.cw[PN.n] / N;
-  let nw = Array(N).fill(ntT), nd = Array(N).fill(ntT * 1.4), cO, cN, ow, od;
-  for (let it = 0; it < 3; it++) {
-    cO = ladder(PO, nw, nd, 70, 3, 0.8*Wt, 1.3*Wt, 0, 0, N, Wt, Dt); [ow, od] = sums(PO, cO, N);
-    cN = ladder(PN, ow, od, 10, 2, 0.6*Wt, 1.5*Wt, 1.5, ntT, N, Wt, Dt); [nw, nd] = sums(PN, cN, N);
-  }
-  const days = [];
-  for (let i = 0; i < N; i++) {
-    const segs = [], ot = fmt(OT, cO[i], cO[i+1], segs), nt = fmt(NT, cN[i], cN[i+1], segs);
-    days.push({ot, nt, ow: ow[i], nw: nw[i], words: ow[i] + nw[i], segs});
-  }
-  return days;
+    const used = new Set(); frozen.forEach(d => d.segs.forEach(([bi,a,z]) => { for (let c = a; c <= z; c++) used.add(bi + ':' + c); }));
+    const OT = [], NT = [];
+    DATA.books.forEach((bk, bi) => {
+        if (readSet.has(bk.n)) return;
+        bk.w.forEach((w, i) => { const c = bk.f + i; if (!used.has(bi + ':' + c)) (bk.t === 'OT' ? OT : NT).push({bi, c, w, d: bk.d[i]}); });
+    });
+    const PO = prep(OT), PN = prep(NT), R = PO.cw[PO.n] + PN.cw[PN.n];
+    if (R <= 0) return [];
+    const N = Math.max(1, Math.round(R / target)), Wt = R / N, Dt = (PO.cd[PO.n] + PN.cd[PN.n]) / N, ntT = PN.cw[PN.n] / N;
+    let nw = Array(N).fill(ntT), nd = Array(N).fill(ntT * 1.4), cO, cN, ow, od;
+    for (let it = 0; it < 3; it++) {
+        cO = ladder(PO, nw, nd, 70, 3, 0.8*Wt, 1.3*Wt, 0, 0, N, Wt, Dt); [ow, od] = sums(PO, cO, N);
+        cN = ladder(PN, ow, od, 10, 2, 0.6*Wt, 1.5*Wt, 1.5, ntT, N, Wt, Dt); [nw, nd] = sums(PN, cN, N);
+    }
+    const days = [];
+    for (let i = 0; i < N; i++) {
+        const segs = [], ot = fmt(OT, cO[i], cO[i+1], segs), nt = fmt(NT, cN[i], cN[i+1], segs);
+        days.push({ot, nt, ow: ow[i], nw: nw[i], words: ow[i] + nw[i], segs});
+    }
+    return days;
 }
 
 /* ---------- Etat ---------- */
 let readSet = new Set(ls(L.read, [])), frozen = ls(L.frozen, []), target = ls(L.target, DEF_TARGET), plan = [];
 const getProg = () => ls(L.prog, {});
 const getStart = () => { const s = ls(L.start, DEF_START); return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : DEF_START; };
+
 function dateFor(i) {
-  const [y, m, d] = getStart().split('-').map(Number), dt = new Date(y, m-1, d + i), p = n => String(n).padStart(2, '0');
-  return p(dt.getDate()) + '/' + p(dt.getMonth()+1) + '/' + dt.getFullYear();
+    const [y, m, d] = getStart().split('-').map(Number), dt = new Date(y, m-1, d + i), p = n => String(n).padStart(2, '0');
+    return p(dt.getDate()) + '/' + p(dt.getMonth()+1) + '/' + dt.getFullYear();
 }
+
 function lastTicked() { const p = getProg(); let m = -1; Object.keys(p).forEach(k => { if (p[k]) m = Math.max(m, +k); }); return m; }
+
 function replan(freeze) {
-  if (freeze) { frozen = plan.slice(0, lastTicked() + 1); lsSet(L.frozen, frozen); }
-  plan = frozen.concat(computePlan(readSet, frozen, target));
+    if (freeze) { frozen = plan.slice(0, lastTicked() + 1); lsSet(L.frozen, frozen); }
+    plan = frozen.concat(computePlan(readSet, frozen, target));
 }
 
 /* ---------- Interface ---------- */
 function renderBooks() {
-  const box = document.getElementById('books');
-  box.innerHTML = ['OT', 'NT'].map(t => '<div><h3>' + (t === 'OT' ? 'Old Testament' : 'New Testament') + '</h3>' +
-    DATA.books.map((b, i) => b.t !== t ? '' :
-      '<label class="book"><input type="checkbox" ' + (readSet.has(b.n) ? 'checked' : '') + ' onchange="toggleBook(' + i + ')">' + b.n +
-      '<span>' + fr(b.w.reduce((a, c) => a + c, 0)) + '</span></label>').join('') + '</div>').join('');
-  document.getElementById('books-count').innerText = readSet.size ? '(' + readSet.size + ' checked)' : '';
+    const box = document.getElementById('books');
+    box.innerHTML = ['OT', 'NT'].map(t => '<div><h3>' + (t === 'OT' ? 'Old Testament' : 'New Testament') + '</h3>' +
+        DATA.books.map((b, i) => b.t !== t ? '' :
+            '<label class="book"><input type="checkbox" ' + (readSet.has(b.n) ? 'checked' : '') + ' onchange="toggleBook(' + i + ')">' + b.n +
+            '<span>' + fr(b.w.reduce((a, c) => a + c, 0)) + '</span></label>').join('') + '</div>').join('');
+    document.getElementById('books-count').innerText = readSet.size ? '(' + readSet.size + ' checked)' : '';
 }
+
 function render() {
-  const prog = getProg(), list = document.getElementById('plan-list'); list.innerHTML = '';
-  let done = 0, wordsRead = 0, total = 0;
-  plan.forEach((day, i) => {
-    total += day.words; const ok = !!prog[i]; if (ok) { done++; wordsRead += day.words; }
-    const card = document.createElement('div'); card.className = 'day-card' + (ok ? ' completed' : '');
-    card.innerHTML = '<div class="checkbox-container"><input type="checkbox" ' + (ok ? 'checked' : '') + ' onchange="toggleDay(' + i + ')"></div>' +
-      '<div class="date-badge">' + dateFor(i) + '</div><div class="passages">' +
-      (day.ot ? '<div class="passage-row passage-text"><span class="tag tag-ot">OT</span>' + day.ot + '</div>' : '') +
-      (day.nt ? '<div class="passage-row passage-text"><span class="tag tag-nt">NT</span>' + day.nt + '</div>' : '') +
-      '<div class="quiz-row"><span>Quiz:</span>' +
-      '<a class="quiz-link" target="_blank" rel="noopener" href="https://claude.ai/new?q=' + encodeURIComponent(quizPrompt(day)) + '">Claude</a>' +
-      '<a class="quiz-link" target="_blank" rel="noopener" href="https://chatgpt.com/?q=' + encodeURIComponent(quizPrompt(day)) + '">ChatGPT</a>' +
-      '<button class="quiz-link" onclick="copyPrompt(' + i + ', this)">Copy prompt</button></div>' +
-      '</div><div class="word-count">' + fr(day.words) + ' words</div>';
-    list.appendChild(card);
-  });
-  const pct = plan.length ? Math.round(done / plan.length * 100) : 0;
-  document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('progress-text').innerText = done + ' / ' + plan.length + ' days (' + pct + '%)';
-  document.getElementById('words-read-text').innerText = fr(wordsRead) + ' / ' + fr(total) + ' words read';
-  document.getElementById('start-date').value = getStart();
-  document.getElementById('target').value = target;
-  document.getElementById('end-text').innerText = plan.length ? 'Ends ' + dateFor(plan.length - 1) : '';
+    const prog = getProg(), list = document.getElementById('plan-list'); list.innerHTML = '';
+    let done = 0, wordsRead = 0, total = 0;
+    plan.forEach((day, i) => {
+        total += day.words; const ok = !!prog[i]; if (ok) { done++; wordsRead += day.words; }
+        const card = document.createElement('div'); card.className = 'day-card' + (ok ? ' completed' : '');
+        card.innerHTML = '<div class="checkbox-container"><input type="checkbox" ' + (ok ? 'checked' : '') + ' onchange="toggleDay(' + i + ')"></div>' +
+            '<div class="date-badge">' + dateFor(i) + '</div><div class="passages">' +
+            (day.ot ? '<div class="passage-row passage-text"><span class="tag tag-ot">OT</span>' + day.ot + '</div>' : '') +
+            (day.nt ? '<div class="passage-row passage-text"><span class="tag tag-nt">NT</span>' + day.nt + '</div>' : '') +
+            '<div class="quiz-row"><span>Quiz:</span>' +
+            '<a class="quiz-link" target="_blank" rel="noopener" href="https://claude.ai/new?q=' + encodeURIComponent(quizPrompt(day)) + '">Claude</a>' +
+            '<a class="quiz-link" target="_blank" rel="noopener" href="https://chatgpt.com/?q=' + encodeURIComponent(quizPrompt(day)) + '">ChatGPT</a>' +
+            '<button class="quiz-link" onclick="copyPrompt(' + i + ', this)">Copy prompt</button></div>' +
+            '</div><div class="word-count">' + fr(day.words) + ' words</div>';
+        list.appendChild(card);
+    });
+    const pct = plan.length ? Math.round(done / plan.length * 100) : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').innerText = done + ' / ' + plan.length + ' days (' + pct + '%)';
+    document.getElementById('words-read-text').innerText = fr(wordsRead) + ' / ' + fr(total) + ' words read';
+    document.getElementById('start-date').value = getStart();
+    document.getElementById('target').value = target;
+    document.getElementById('end-text').innerText = plan.length ? 'Ends ' + dateFor(plan.length - 1) : '';
 }
+
 function quizPrompt(day) {
-  const parts = [];
-  if (day.ot) parts.push('Old Testament: ' + day.ot);
-  if (day.nt) parts.push('New Testament: ' + day.nt);
-  return "Create an interactive multiple-choice quiz (MCQ) on today's Bible reading (KJV). " + parts.join('. ') + '. ' +
-    'Build it as a clickable interactive app (an artifact, canvas or interactive widget, not a plain text list) with 10 questions that test understanding of the main events, themes, people and meaning in context, not trivia. ' +
-    'Show one question at a time with 4 answer options and a progress indicator. After I pick an answer, show immediately whether it is correct, with a short explanation referring to the passage. ' +
-    'At the end, show my score, the questions I missed, and a 3-line summary of the key takeaways.';
+    const parts = [];
+    if (day.ot) parts.push('Old Testament: ' + day.ot);
+    if (day.nt) parts.push('New Testament: ' + day.nt);
+    return "Create an interactive multiple-choice quiz (MCQ) on today's Bible reading (KJV). " + parts.join('. ') + '. ' +
+        'Build it as a clickable interactive app (an artifact, canvas or interactive widget, not a plain text list) with 10 questions that test understanding of the main events, themes, people and meaning in context, not trivia. ' +
+        'Show one question at a time with 4 answer options and a progress indicator. After I pick an answer, show immediately whether it is correct, with a short explanation referring to the passage. ' +
+        'At the end, show my score, the questions I missed, and a 3-line summary of the key takeaways.';
 }
+
 function copyPrompt(i, btn) {
-  const text = quizPrompt(plan[i]), done = () => { const o = btn.innerText; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = o, 1500); };
-  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => {});
-  else { const a = document.createElement('textarea'); a.value = text; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done(); }
+    const text = quizPrompt(plan[i]), done = () => { const o = btn.innerText; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = o, 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => {});
+    else { const a = document.createElement('textarea'); a.value = text; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done(); }
 }
+
 function toggleDay(i) { const p = getProg(); p[i] = !p[i]; lsSet(L.prog, p); render(); }
+
 function toggleBook(i) {
-  const n = DATA.books[i].n; readSet.has(n) ? readSet.delete(n) : readSet.add(n);
-  lsSet(L.read, [...readSet]); replan(true); renderBooks(); render();
+    const n = DATA.books[i].n; readSet.has(n) ? readSet.delete(n) : readSet.add(n);
+    lsSet(L.read, [...readSet]); replan(true); renderBooks(); render();
 }
+
 function setStart(v) { if (/^\d{4}-\d{2}-\d{2}$/.test(v)) { lsSet(L.start, v); render(); } }
-function setTarget(v) { v = parseInt(v, 10); if (v >= 2000 && v <= 40000) { target = v; lsSet(L.target, v); replan(true); } render(); }
 
-    function resetProgress() {  
-  if (!confirm('Reset your progress, start date, target, and checked books?')) return;  
-  
-  readSet = new Set(); 
-  frozen = []; 
-  
-  // Supprime toutes les clés associées à l'application dans le localStorage
-  [L.read, L.frozen, L.prog, L.start, L.target].forEach(k => { 
-    try { localStorage.removeItem(k); } catch (e) {} 
-  });  
-  
-  // Recharge l'objectif par défaut si nécessaire ou réinitialise les variables
-  target = DEF_TARGET;
-  
-  replan(false); 
-  renderBooks(); 
-  render(); 
+function setTarget(v) { 
+    v = parseInt(v, 10); 
+    if (v >= 2000 && v <= 40000) { target = v; lsSet(L.target, v); replan(true); render(); } 
 }
-    
-if (typeof document !== 'undefined') { replan(false); renderBooks(); render(); }
 
+function resetProgress() {  
+    if (!confirm('Reset your progress, start date, target, and checked books?')) return;  
+    readSet = new Set(); 
+    frozen = []; 
+    [L.read, L.frozen, L.prog, L.start, L.target].forEach(k => { 
+        try { localStorage.removeItem(k); } catch (e) {} 
+    });  
+    target = DEF_TARGET;
+    replan(false); 
+    renderBooks(); 
+    render(); 
+}
+
+if (typeof document !== 'undefined') { replan(false); renderBooks(); render(); }
 </script>
 </body>
 </html>
