@@ -468,10 +468,23 @@ function toggleBook(i) {
 }
 function setStart(v) { if (/^\d{4}-\d{2}-\d{2}$/.test(v)) { lsSet(L.start, v); render(); } }
 function setTarget(v) { v = parseInt(v, 10); if (v >= 2000 && v <= 40000) { target = v; lsSet(L.target, v); replan(true); } render(); }
-function resetProgress() {
-  if (!confirm('Reset your progress and checked books?')) return;
-  readSet = new Set(); frozen = []; [L.read, L.frozen, L.prog].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
-  replan(false); renderBooks(); render();
+    function resetProgress() {  
+  if (!confirm('Reset your progress, start date, target, and checked books?')) return;  
+  
+  readSet = new Set(); 
+  frozen = []; 
+  
+  // Supprime toutes les clés associées à l'application dans le localStorage
+  [L.read, L.frozen, L.prog, L.start, L.target].forEach(k => { 
+    try { localStorage.removeItem(k); } catch (e) {} 
+  });  
+  
+  // Recharge l'objectif par défaut si nécessaire ou réinitialise les variables
+  target = DEF_TARGET;
+  
+  replan(false); 
+  renderBooks(); 
+  render(); 
 }
 if (typeof document !== 'undefined') { replan(false); renderBooks(); render(); }
 
